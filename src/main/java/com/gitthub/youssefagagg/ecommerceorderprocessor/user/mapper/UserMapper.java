@@ -8,9 +8,12 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.user.entity.Role;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.entity.User;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 /**
  * Mapper for the entity {@link User} and its DTO {@link UserDTO}.
@@ -39,5 +42,10 @@ public interface UserMapper extends EntityMapper<UserDTO, User> {
 
   User createUserRequestToEntity(CreateUserRequest createUserRequest);
 
-
+  @Override
+  @Named("partialUpdate")
+  @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+  @Mapping(target = "roles",
+           ignore = true)
+  void partialUpdate(@MappingTarget User entity, UserDTO dto);
 }
