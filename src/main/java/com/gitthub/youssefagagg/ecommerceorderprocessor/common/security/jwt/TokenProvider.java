@@ -1,7 +1,5 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.common.security.jwt;
 
-import static com.gitthub.youssefagagg.ecommerceorderprocessor.common.security.AuthoritiesRole.ROLE_ADMIN;
-
 import com.gitthub.youssefagagg.ecommerceorderprocessor.common.security.config.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -69,13 +67,9 @@ public class TokenProvider {
                                        .collect(Collectors.joining(","));
     long now = new Date().getTime();
     long tokenExpiredAfter;
-    if (authorities.contains(ROLE_ADMIN.name())) {
-      tokenExpiredAfter = 24 * 60 * 60 * 1000L; // 24 hours in milliseconds
+    tokenExpiredAfter =
+        jwtProperties.getExpiration() * 1000; // Convert seconds to milliseconds
 
-    } else {
-      tokenExpiredAfter =
-          jwtProperties.getExpiration() * 1000; // Convert seconds to milliseconds
-    }
     Date expirationDate = new Date(now + tokenExpiredAfter);
     return Jwts
         .builder()
@@ -87,7 +81,7 @@ public class TokenProvider {
         .compact();
   }
 
-  public String createRefreshToken(String username, String deviceId) {
+  public String createRefreshToken(String username) {
     // Set a long expiration date for refresh tokens
     Date now = new Date();
     Date refreshTokenExpiration = new Date(
@@ -95,7 +89,6 @@ public class TokenProvider {
 
     return Jwts.builder()
                .subject(username) // Only include the username as the subject
-               .claim("device", deviceId)
                .issuedAt(now)     // Token issue time
                .expiration(refreshTokenExpiration) // Token expiration time
                .signWith(key)        // Sign using the same secret key
