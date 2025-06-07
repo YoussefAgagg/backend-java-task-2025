@@ -9,7 +9,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.common.security.jwt.Toke
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -48,7 +47,6 @@ public class SecurityConfig {
    * @return a {@link SecurityFilterChain} defining the security configurations for the application.
    * @throws Exception if an error occurs during the construction of the security filter chain.
    */
-  @SuppressWarnings("checkstyle:LineLength")
   @Bean
   public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
 
