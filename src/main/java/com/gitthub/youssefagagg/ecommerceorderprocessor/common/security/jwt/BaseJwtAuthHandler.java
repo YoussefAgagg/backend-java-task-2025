@@ -2,8 +2,8 @@ package com.gitthub.youssefagagg.ecommerceorderprocessor.common.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.common.exception.ErrorCode;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.common.exception.TracerService;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.common.exception.response.ApiErrorResponse;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.common.service.TracerService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

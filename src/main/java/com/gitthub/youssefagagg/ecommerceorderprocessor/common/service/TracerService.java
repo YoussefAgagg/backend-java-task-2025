@@ -1,4 +1,4 @@
-package com.gitthub.youssefagagg.ecommerceorderprocessor.common.exception;
+package com.gitthub.youssefagagg.ecommerceorderprocessor.common.service;
 
 
 import io.micrometer.tracing.Span;

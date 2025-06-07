@@ -3,6 +3,7 @@ package com.gitthub.youssefagagg.ecommerceorderprocessor.common.exception;
 
 import com.gitthub.youssefagagg.ecommerceorderprocessor.common.exception.handler.ApiExceptionHandler;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.common.exception.response.ApiErrorResponse;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.common.service.TracerService;
 import java.util.List;
 import java.util.Locale;
 import lombok.extern.slf4j.Slf4j;
@@ -73,7 +74,8 @@ public class ErrorHandlingControllerAdvice {
    * @return a {@code ResponseEntity} containing the constructed {@code ApiErrorResponse} object
    */
   @ExceptionHandler
-  public ResponseEntity<?> handleException(Throwable exception, WebRequest webRequest,
+  public ResponseEntity<ApiErrorResponse> handleException(Throwable exception,
+                                                          WebRequest webRequest,
                                            Locale locale) {
     log.debug("webRequest: {}", webRequest);
     log.debug("locale: {}", locale);
