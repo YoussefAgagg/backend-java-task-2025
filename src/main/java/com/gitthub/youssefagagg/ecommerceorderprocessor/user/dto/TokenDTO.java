@@ -20,10 +20,6 @@ public class TokenDTO {
           example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c")
   private String accessToken;
 
-  @Schema(description = "JWT refresh token used to obtain new access tokens",
-          example = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyLCJ0eXBlIjoicmVmcmVzaCJ9.oUZe4fRYrTMTKr_KA0zXJwbdmcEGIwTgYQRKkwGnWFE")
-  private String refreshToken;
-
   @Schema(description = "Type of authentication token",
           example = "Bearer",
           allowableValues = {"Bearer"})

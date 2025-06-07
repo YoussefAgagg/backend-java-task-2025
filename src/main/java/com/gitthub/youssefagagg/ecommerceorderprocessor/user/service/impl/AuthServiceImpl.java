@@ -4,22 +4,17 @@ package com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.impl;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.common.exception.ErrorCode;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.common.exception.custom.CustomException;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.common.security.AuthoritiesRole;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.common.security.config.JwtProperties;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.common.security.jwt.TokenProvider;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.CreateUserRequest;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.LoginRequest;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.RefreshTokenDTO;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.RefreshTokenRequest;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.TokenDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.UserDTO;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.entity.RefreshToken;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.entity.Role;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.entity.User;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.mapper.UserMapper;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.repository.RoleRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.repository.UserRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.AuthService;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,8 +42,6 @@ public class AuthServiceImpl implements AuthService {
   private final RoleRepository roleRepository;
   private final PasswordEncoder passwordEncoder;
   private final UserMapper userMapper;
-  private final RefreshTokenService refreshTokenService;
-  private final JwtProperties jwtProperties;
 
 
   @Override
@@ -115,19 +108,10 @@ public class AuthServiceImpl implements AuthService {
                                                                      "User not found with username: "
                                                                      + loginRequest.getUsername()));
 
-    // Create refresh token
-    RefreshToken refreshToken = refreshTokenService.createRefreshToken(user,
-                                                                       loginRequest,
-                                                                       request);
-
-
-    // Build token response
-    String token = refreshToken != null ? refreshToken.getToken() : null;
 
     // Build token response
     return TokenDTO.builder()
                    .accessToken(jwt)
-                   .refreshToken(token)
                    .tokenType("Bearer")
                    .username(user.getUsername())
                    .email(user.getEmail())
@@ -136,45 +120,8 @@ public class AuthServiceImpl implements AuthService {
                    .build();
   }
 
-  @Override
-  @Transactional
-  public RefreshTokenDTO refreshToken(RefreshTokenRequest refreshTokenRequest) {
-    log.debug("Request to refresh token : {}", refreshTokenRequest.getRefreshToken());
-
-    return refreshTokenService.findByToken(refreshTokenRequest.getRefreshToken())
-                              .map(refreshTokenService::verifyExpiration)
-                              .map(RefreshToken::getUser)
-                              .map(user -> {
-                                // Create authentication token
-                                Authentication authentication = createAuthentication(user);
-
-                                // Generate new JWT token
-                                String jwt = tokenProvider.createToken(authentication);
-
-                                // Don't revoke old refresh token if it's not expired
-                                // We'll keep using the same refresh token
-
-                                // Build token response with only the new access token
-                                return RefreshTokenDTO.builder()
-                                                      .accessToken(jwt)
-                                                      .tokenType("Bearer")
-                                                      .expiresIn(jwtProperties.getExpiration())
-                                                      .build();
-                              })
-                              .orElseThrow(() -> new CustomException(
-                                  ErrorCode.AUTHENTICATION_CREDENTIALS_NOT_FOUND,
-                                  "Refresh token not found: "
-                                  + refreshTokenRequest.getRefreshToken()));
-  }
 
 
-  @Override
-  @Transactional
-  public void logout(RefreshTokenRequest refreshTokenRequest) {
-    log.debug("Request to logout user with token : {}", refreshTokenRequest.getRefreshToken());
-
-    refreshTokenService.revokeRefreshToken(refreshTokenRequest.getRefreshToken());
-  }
 
 
   /**

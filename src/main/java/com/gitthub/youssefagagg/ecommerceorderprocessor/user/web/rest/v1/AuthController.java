@@ -2,8 +2,6 @@ package com.gitthub.youssefagagg.ecommerceorderprocessor.user.web.rest.v1;
 
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.CreateUserRequest;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.LoginRequest;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.RefreshTokenDTO;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.RefreshTokenRequest;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.TokenDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.UserDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.AuthService;
@@ -60,34 +58,5 @@ public class AuthController {
     log.debug("REST request to authenticate user : {}", loginRequest.getUsername());
     TokenDTO result = authService.login(loginRequest, request);
     return ResponseEntity.ok(result);
-  }
-
-  /**
-   * {@code POST  /refresh-token} : Refresh an access token.
-   *
-   * @param refreshTokenRequest the refresh token
-   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the new
-   *     authentication token
-   */
-  @PostMapping("/refresh-token")
-  public ResponseEntity<RefreshTokenDTO> refreshToken(
-      @Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
-    log.debug("REST request to refresh token");
-    RefreshTokenDTO result = authService.refreshToken(refreshTokenRequest);
-    return ResponseEntity.ok(result);
-  }
-
-  /**
-   * {@code POST  /logout} : Logout a user.
-   *
-   * @param refreshTokenRequest the refresh token to invalidate
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
-   */
-  @PostMapping("/logout")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public ResponseEntity<Void> logout(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
-    log.debug("REST request to logout user");
-    authService.logout(refreshTokenRequest);
-    return ResponseEntity.noContent().build();
   }
 }

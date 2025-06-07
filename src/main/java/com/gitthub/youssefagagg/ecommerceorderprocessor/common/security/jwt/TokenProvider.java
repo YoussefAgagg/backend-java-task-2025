@@ -81,20 +81,6 @@ public class TokenProvider {
         .compact();
   }
 
-  public String createRefreshToken(String username) {
-    // Set a long expiration date for refresh tokens
-    Date now = new Date();
-    Date refreshTokenExpiration = new Date(
-        now.getTime() + jwtProperties.getRefreshTokenExpiration());
-
-    return Jwts.builder()
-               .subject(username) // Only include the username as the subject
-               .issuedAt(now)     // Token issue time
-               .expiration(refreshTokenExpiration) // Token expiration time
-               .signWith(key)        // Sign using the same secret key
-               .compact();           // Build the token string
-  }
-
   /**
    * Retrieves an {@link Authentication} object based on the provided JWT token. This method parses
    * the JWT token to extract claims and authorities, creating an authenticated {@link User}
