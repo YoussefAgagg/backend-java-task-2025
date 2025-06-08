@@ -164,7 +164,7 @@ class UserServiceIT {
     loginWithNewPassword.setUsername(createUserRequest.getUsername());
     loginWithNewPassword.setPassword(changePasswordRequest.getNewPassword());
 
-    TokenDTO tokenDTO = authService.login(loginWithNewPassword, httpServletRequest);
+    TokenDTO tokenDTO = authService.login(loginWithNewPassword);
     assertThat(tokenDTO).isNotNull();
     assertThat(tokenDTO.getAccessToken()).isNotBlank();
   }

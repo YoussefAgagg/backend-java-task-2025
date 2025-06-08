@@ -110,7 +110,7 @@ class AuthServiceIT {
     authService.register(createUserRequest);
 
     // When
-    TokenDTO result = authService.login(loginRequest, httpServletRequest);
+    TokenDTO result = authService.login(loginRequest);
 
     // Then
     assertThat(result).isNotNull();
@@ -128,7 +128,7 @@ class AuthServiceIT {
     // Given - no user registered
 
     // When/Then
-    assertThatThrownBy(() -> authService.login(loginRequest, httpServletRequest))
+    assertThatThrownBy(() -> authService.login(loginRequest))
         .isInstanceOf(CustomException.class)
         .hasFieldOrPropertyWithValue("errorCode", ErrorCode.BAD_CREDENTIALS);
   }
@@ -145,7 +145,7 @@ class AuthServiceIT {
     wrongPasswordRequest.setPassword("wrongpassword");
 
     // When/Then
-    assertThatThrownBy(() -> authService.login(wrongPasswordRequest, httpServletRequest))
+    assertThatThrownBy(() -> authService.login(wrongPasswordRequest))
         .isInstanceOf(CustomException.class)
         .hasFieldOrPropertyWithValue("errorCode", ErrorCode.BAD_CREDENTIALS);
   }

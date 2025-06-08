@@ -158,7 +158,7 @@ class AuthServiceImplTest {
     when(tokenProvider.createToken(any(Authentication.class))).thenReturn(token);
 
     // When
-    TokenDTO result = authService.login(loginRequest, httpServletRequest);
+    TokenDTO result = authService.login(loginRequest);
 
     // Then
     assertThat(result).isNotNull();
@@ -182,7 +182,7 @@ class AuthServiceImplTest {
         Optional.empty());
 
     // When/Then
-    assertThatThrownBy(() -> authService.login(loginRequest, httpServletRequest))
+    assertThatThrownBy(() -> authService.login(loginRequest))
         .isInstanceOf(CustomException.class)
         .hasFieldOrPropertyWithValue("errorCode", ErrorCode.BAD_CREDENTIALS);
 
@@ -199,7 +199,7 @@ class AuthServiceImplTest {
     when(passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())).thenReturn(false);
 
     // When/Then
-    assertThatThrownBy(() -> authService.login(loginRequest, httpServletRequest))
+    assertThatThrownBy(() -> authService.login(loginRequest))
         .isInstanceOf(CustomException.class)
         .hasFieldOrPropertyWithValue("errorCode", ErrorCode.BAD_CREDENTIALS);
 
