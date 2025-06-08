@@ -66,21 +66,11 @@ public class SecurityConfig {
                                    .requestMatchers("/management/**").hasAuthority(
                                        AuthoritiesRole.ROLE_ADMIN.getValue())
                                    // Auth endpoints - public access
-                                   .requestMatchers("/v1/auth/register").permitAll()
-                                   .requestMatchers("/v1/auth/login").permitAll()
-                                   .requestMatchers("/v1/auth/oauth2/login").permitAll()
-                                   .requestMatchers("/v1/auth/refresh-token").permitAll()
-                                   .requestMatchers("/v1/auth/forgot-password").permitAll()
-                                   .requestMatchers("/v1/auth/reset-password").permitAll()
+                                   .requestMatchers("/api/v1/auth/register").permitAll()
+                                   .requestMatchers("/api/v1/auth/login").permitAll()
                                    // User profile endpoints - authenticated user access
-                                   .requestMatchers("/v1/users/me").authenticated()
-                                   // contact us form endpoints - public access
-                                   .requestMatchers("/v1/contact-us-forms").permitAll()
-                                   // contact us form management endpoints - admin access
-                                   .requestMatchers("/v1/admin/contact-us-forms/**")
-                                   .hasAuthority(AuthoritiesRole.ROLE_ADMIN.getValue())
                                    // Admin endpoints - admin only access
-                                   .requestMatchers("/v1/admin/**").hasAuthority(
+                                   .requestMatchers("/api/v1/admin/**").hasAuthority(
                                        AuthoritiesRole.ROLE_ADMIN.getValue())
                                    .anyRequest().authenticated()
                               )
