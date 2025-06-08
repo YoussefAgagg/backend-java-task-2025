@@ -39,17 +39,6 @@ public class UserServiceImpl implements UserService {
                         .map(currentUser -> {
                           // Ensure the user can only update their own profile
                           updateUserRequest.setId(currentUser.getId());
-
-                          // Check if email is being changed and already exists
-                          if (updateUserRequest.getEmail() != null &&
-                              !updateUserRequest.getEmail().equals(currentUser.getEmail()) &&
-                              userRepository.existsByEmailIgnoreCase(
-                                  updateUserRequest.getEmail())) {
-                            throw new CustomException(ErrorCode.EMAIL_ALREADY_EXISTS,
-                                                      "Email already exists: "
-                                                      + updateUserRequest.getEmail());
-                          }
-
                           // Update user fields - username is not updated
                           currentUser.setFirstName(updateUserRequest.getFirstName());
                           currentUser.setLastName(updateUserRequest.getLastName());
