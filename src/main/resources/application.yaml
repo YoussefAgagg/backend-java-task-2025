@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: ecommerce-order-processor
+  threads:
+    virtual:
+      enabled: true
+  liquibase:
+    enabled: true
+    drop-first: false
+    change-log: classpath:db/changelog/master.yaml
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        generate_statistics: true
+        default_batch_fetch_size: 30
+        statement_inspector: null
+        order_updates: false
+        order_inserts: false
+    generate-ddl: false
+
+# Encryption configuration
+# This is a placeholder and should be replaced with a secure key in production
+# You can generate a secure key using EncryptionUtil.generateSecretKey()
+encryption:
+  secret-key: VGhpcyBpcyBhIHNlY3VyZSBrZXkgZm9yIGVuY3J5cHRpb24=
+# JWT configuration for local
+jwt:
+  secret: LocalRouhMatrouhSecretKeyLocalRouhMatrouhSecretKey

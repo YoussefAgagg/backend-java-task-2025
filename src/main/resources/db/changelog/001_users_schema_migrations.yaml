@@ -1,0 +1,202 @@
+databaseChangeLog:
+  - changeSet:
+      id: v1.2025-06-07T23:01:00
+      author: Youssef Agagg
+      comment: "Create table for Users"
+      changes:
+        - createSequence:
+            sequenceName: "users_id_seq"
+            startValue: 1000
+            incrementBy: 1
+        - createTable:
+            tableName: "users"
+            columns:
+              - column:
+                  name: "id"
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                  defaultValueComputed: "nextval('users_id_seq')" # PostgreSQL-specific sequence value
+              - column:
+                  name: "username"
+                  type: "VARCHAR(50)"
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: "password_hash"
+                  type: "VARCHAR(60)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "first_name"
+                  type: "VARCHAR(50)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "last_name"
+                  type: "VARCHAR(50)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "email"
+                  type: "VARCHAR(255)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "phone"
+                  type: "VARCHAR(20)"
+                  constraints:
+                    nullable: true
+              # Auditing Fields
+              - column:
+                  name: "created_date"
+                  type: "timestamp with time zone"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "last_modified_date"
+                  type: "timestamp with time zone"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "created_by"
+                  type: "VARCHAR(50)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "last_modified_by"
+                  type: "VARCHAR(50)"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: "version"
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+        - createIndex:
+            indexName: idx_users_username
+            tableName: users
+            columns:
+              - column:
+                  name: username
+            unique: true
+  - changeSet:
+      id: v1.2025-06-08T00:00:00
+      author: Youssef Agagg
+      comment: "Create table for Roles"
+      changes:
+        - createTable:
+            tableName: "roles"
+            columns:
+              - column:
+                  name: "name"
+                  type: "VARCHAR(50)"
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+        - createIndex:
+            indexName: idx_roles_name
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+            unique: true
+  - changeSet:
+      id: v1.2025-06-08T00:02:00
+      author: Youssef Agagg
+      comment: "Create table for User-Role relationship"
+      changes:
+        - createTable:
+            tableName: "user_role"
+            columns:
+              - column:
+                  name: "user_id"
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_role_user_id
+                    references: users(id)
+              - column:
+                  name: "role_name"
+                  type: "VARCHAR(50)"
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_role_role_name
+                    references: roles(name)
+        - addPrimaryKey:
+            tableName: user_role
+            columnNames: user_id, role_name
+            constraintName: pk_user_role
+        - createIndex:
+            indexName: idx_user_role_user_id
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            indexName: idx_user_role_role_name
+            tableName: user_role
+            columns:
+              - column:
+                  name: role_name
+  - changeSet:
+      id: v1.2025-06-08T00:05:00
+      author: Youssef Agagg
+      comment: "Insert roles"
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: "ROLE_ADMIN"
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: "ROLE_USER"
+  - changeSet:
+      id: v1.2025-06-08T00:10:00
+      author: Youssef Agagg
+      comment: "Insert admin user"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: "1"
+              - column:
+                  name: username
+                  value: "admin"
+              - column:
+                  name: password_hash
+                  value: "$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC" # password is 'admin'
+              - column:
+                  name: first_name
+                  value: "Admin"
+              - column:
+                  name: last_name
+                  value: "User"
+              - column:
+                  name: email
+                  value: "admin@localhost"
+              - column:
+                  name: created_by
+                  value: "system"
+              - column:
+                  name: created_date
+                  valueDate: "CURRENT_TIMESTAMP"
+              - column:
+                  name: last_modified_by
+                  value: "system"
+              - column:
+                  name: last_modified_date
+                  valueDate: "CURRENT_TIMESTAMP"
+              - column:
+                  name: version
+                  valueNumeric: "0"
+        - sql:
+            sql: INSERT INTO user_role (user_id, role_name) VALUES (1, 'ROLE_ADMIN');

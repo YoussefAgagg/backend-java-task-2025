@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: 001_users_schema_migrations.yaml
+      relativeToChangelogFile: true
