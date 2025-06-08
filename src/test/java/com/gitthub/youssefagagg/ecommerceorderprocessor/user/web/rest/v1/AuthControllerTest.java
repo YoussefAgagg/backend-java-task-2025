@@ -6,9 +6,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.TestcontainersConfiguration;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.CreateUserRequest;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.LoginRequest;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.AuthService;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.CreateUserRequest;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.LoginRequest;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -8,14 +8,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.TestcontainersConfiguration;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.ChangePasswordRequest;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.CreateUserRequest;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.LoginRequest;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.TokenDTO;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.UpdateUserRequest;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.UserDTO;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.AuthService;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.UserService;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.ChangePasswordRequest;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.CreateUserRequest;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.LoginRequest;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.TokenDTO;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.UpdateUserRequest;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.UserDTO;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.service.AuthService;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import org.junit.jupiter.api.AfterEach;
