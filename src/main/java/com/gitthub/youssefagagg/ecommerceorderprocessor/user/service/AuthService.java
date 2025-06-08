@@ -5,7 +5,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.CreateUserReque
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.LoginRequest;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.TokenDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.UserDTO;
-import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Service Interface for managing authentication and authorization.
@@ -24,9 +23,8 @@ public interface AuthService {
    * Authenticate a user.
    *
    * @param loginRequest the login information
-   * @param request
    * @return the authentication token
    */
-  TokenDTO login(LoginRequest loginRequest, HttpServletRequest request);
+  TokenDTO login(LoginRequest loginRequest);
 
 }

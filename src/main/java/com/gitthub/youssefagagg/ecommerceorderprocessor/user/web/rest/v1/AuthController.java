@@ -6,7 +6,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.TokenDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.UserDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * REST controller for managing authentication and authorization.
  */
 @RestController
-@RequestMapping("/v1/auth")
+@RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "User - Auth")
@@ -53,10 +52,9 @@ public class AuthController {
    *     authentication token
    */
   @PostMapping("/login")
-  public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginRequest loginRequest,
-                                        HttpServletRequest request) {
+  public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginRequest loginRequest) {
     log.debug("REST request to authenticate user : {}", loginRequest.getUsername());
-    TokenDTO result = authService.login(loginRequest, request);
+    TokenDTO result = authService.login(loginRequest);
     return ResponseEntity.ok(result);
   }
 }

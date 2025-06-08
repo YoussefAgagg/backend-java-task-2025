@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * REST controller for managing users.
  */
 @RestController
-@RequestMapping("/v1/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "User - User-Profile")

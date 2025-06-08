@@ -15,7 +15,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.user.mapper.UserMapper;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.repository.RoleRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.repository.UserRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.AuthService;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -71,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
 
   @Override
   @Transactional
-  public TokenDTO login(LoginRequest loginRequest, HttpServletRequest request) {
+  public TokenDTO login(LoginRequest loginRequest) {
     log.debug("Request to authenticate user : {}", loginRequest.getUsername());
 
     // Get user
