@@ -79,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
                               .orElseThrow(() -> new CustomException(ErrorCode.BAD_CREDENTIALS,
                                                                      "User not found with username: "
                                                                      + loginRequest.getUsername()));
-    if (!user.getPassword().equals(passwordEncoder.encode(loginRequest.getPassword()))) {
+    if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
       throw new CustomException(ErrorCode.BAD_CREDENTIALS,
                                 "Invalid password for user: " + loginRequest.getUsername());
     }
