@@ -1,6 +1,5 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto;
 
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -59,6 +58,4 @@ public class UpdateUserRequest {
           example = "+12025550179",
           pattern = "^\\+?[0-9]{10,15}$")
   private String phone;
-
-  private User.Gender gender;
 }

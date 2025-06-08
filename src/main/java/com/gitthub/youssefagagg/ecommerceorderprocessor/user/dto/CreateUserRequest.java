@@ -1,6 +1,5 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto;
 
-import com.gitthub.youssefagagg.ecommerceorderprocessor.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -76,6 +75,4 @@ public class CreateUserRequest {
           minLength = 4,
           maxLength = 100)
   private String password;
-
-  private User.Gender gender;
 }
