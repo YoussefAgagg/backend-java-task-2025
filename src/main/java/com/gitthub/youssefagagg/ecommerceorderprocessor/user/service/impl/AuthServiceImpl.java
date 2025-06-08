@@ -21,9 +21,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +35,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthServiceImpl implements AuthService {
 
   private final TokenProvider tokenProvider;
-  private final AuthenticationManagerBuilder authenticationManagerBuilder;
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
   private final PasswordEncoder passwordEncoder;
@@ -55,21 +52,9 @@ public class AuthServiceImpl implements AuthService {
                                 "Username already exists: " + createUserRequest.getUsername());
     }
 
-    // Check if email already exists for non-deleted users
-    if (createUserRequest.getEmail() != null
-        && userRepository.existsByEmailIgnoreCaseAndDeletedFalse(
-        createUserRequest.getEmail())) {
-      throw new CustomException(ErrorCode.EMAIL_ALREADY_EXISTS,
-                                "Email already exists: " + createUserRequest.getEmail());
-    }
-
     // Create new user
     User user = userMapper.createUserRequestToEntity(createUserRequest);
     user.setPassword(passwordEncoder.encode(createUserRequest.getPassword()));
-
-    // Set email and phone as not verified for regular user registration
-    user.setEmailVerified(false);
-    user.setPhoneVerified(false);
 
     // Set role - only USER role is allowed during registration
     Set<Role> roles = new HashSet<>();
@@ -89,25 +74,20 @@ public class AuthServiceImpl implements AuthService {
   public TokenDTO login(LoginRequest loginRequest, HttpServletRequest request) {
     log.debug("Request to authenticate user : {}", loginRequest.getUsername());
 
+    // Get user
+    User user = userRepository.findByUsernameIgnoreCase(loginRequest.getUsername())
+                              .orElseThrow(() -> new CustomException(ErrorCode.BAD_CREDENTIALS,
+                                                                     "User not found with username: "
+                                                                     + loginRequest.getUsername()));
+    if (!user.getPassword().equals(passwordEncoder.encode(loginRequest.getPassword()))) {
+      throw new CustomException(ErrorCode.BAD_CREDENTIALS,
+                                "Invalid password for user: " + loginRequest.getUsername());
+    }
     // Create authentication token
-    UsernamePasswordAuthenticationToken authenticationToken =
-        new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
-                                                loginRequest.getPassword());
-
-    // Authenticate user
-    Authentication authentication = authenticationManagerBuilder.getObject().authenticate(
-        authenticationToken);
-    SecurityContextHolder.getContext().setAuthentication(authentication);
+    Authentication authentication = createAuthentication(user);
 
     // Generate JWT token
     String jwt = tokenProvider.createToken(authentication);
-
-    // Get user
-    User user = userRepository.findByUsernameIgnoreCase(loginRequest.getUsername())
-                              .orElseThrow(() -> new CustomException(ErrorCode.USERNAME_NOT_FOUND,
-                                                                     "User not found with username: "
-                                                                     + loginRequest.getUsername()));
-
 
     // Build token response
     return TokenDTO.builder()

@@ -36,15 +36,6 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
    * @param email the email to check
    * @return true if the email exists for a non-deleted user, false otherwise
    */
-  boolean existsByEmailIgnoreCaseAndDeletedFalse(String email);
+  boolean existsByEmailIgnoreCase(String email);
 
-
-  /**
-   * Retrieves a non-deleted user entity by their username, ignoring case sensitivity.
-   *
-   * @param username the username of the user to search for
-   * @return an optional containing the user if found and not deleted, or an empty optional
-   *     otherwise
-   */
-  Optional<User> findByUsernameIgnoreCaseAndDeletedIsFalse(String username);
 }

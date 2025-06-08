@@ -4,8 +4,6 @@ package com.gitthub.youssefagagg.ecommerceorderprocessor.user.entity;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.common.entity.AbstractAuditingEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,7 +15,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -75,9 +72,9 @@ public class User extends AbstractAuditingEntity {
 
   @Email
   @Size(min = 5,
-        max = 254)
+        max = 255)
   @Column(name = "email",
-          length = 254)
+          length = 255)
   private String email;
 
   @Pattern(regexp = "^\\+?[0-9]{10,15}$")
@@ -90,36 +87,9 @@ public class User extends AbstractAuditingEntity {
       name = "user_role",
       joinColumns = @JoinColumn(name = "user_id",
                                 referencedColumnName = "id"),
-      inverseJoinColumns = @JoinColumn(name = "role_id",
-                                       referencedColumnName = "id")
+      inverseJoinColumns = @JoinColumn(name = "role_name",
+                                       referencedColumnName = "name")
   )
   @Builder.Default
   private Set<Role> roles = new HashSet<>();
-
-  @Column(name = "deleted",
-          nullable = false)
-  @Builder.Default
-  private boolean deleted = false;
-
-  @Column(name = "deleted_at")
-  private Instant deletedAt;
-
-  @Column(name = "email_verified",
-          nullable = false)
-  @Builder.Default
-  private Boolean emailVerified = false;
-
-  @Column(name = "phone_verified",
-          nullable = false)
-  @Builder.Default
-  private Boolean phoneVerified = false;
-
-  @Column(name = "gender",
-          length = 10)
-  @Enumerated(EnumType.STRING)
-  private Gender gender;
-
-  public enum Gender {
-    MALE, FEMALE,
-  }
 }

@@ -9,7 +9,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.user.dto.UserDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.mapper.UserMapper;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.repository.UserRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.UserService;
-import java.time.Instant;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +43,7 @@ public class UserServiceImpl implements UserService {
                           // Check if email is being changed and already exists
                           if (updateUserRequest.getEmail() != null &&
                               !updateUserRequest.getEmail().equals(currentUser.getEmail()) &&
-                              userRepository.existsByEmailIgnoreCaseAndDeletedFalse(
+                              userRepository.existsByEmailIgnoreCase(
                                   updateUserRequest.getEmail())) {
                             throw new CustomException(ErrorCode.EMAIL_ALREADY_EXISTS,
                                                       "Email already exists: "
@@ -56,8 +55,6 @@ public class UserServiceImpl implements UserService {
                           currentUser.setLastName(updateUserRequest.getLastName());
                           currentUser.setEmail(updateUserRequest.getEmail());
                           currentUser.setPhone(updateUserRequest.getPhone());
-                          currentUser.setGender(updateUserRequest.getGender());
-
                           return userMapper.toDto(userRepository.save(currentUser));
                         })
                         .orElseThrow(() -> new CustomException(
@@ -77,20 +74,6 @@ public class UserServiceImpl implements UserService {
                             "User not authenticated"));
   }
 
-
-  @Override
-  @Transactional
-  public void deleteCurrentUser() {
-    log.debug("Request to soft delete current user");
-    SecurityUtils.getCurrentUserUserName()
-                 .flatMap(userRepository::findByUsernameIgnoreCase)
-                 .ifPresent(user -> {
-                   user.setDeleted(true);
-                   user.setDeletedAt(Instant.now());
-                   userRepository.save(user);
-                   log.debug("Soft deleted user: {}", user);
-                 });
-  }
 
   @Override
   @Transactional

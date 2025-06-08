@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -68,19 +67,6 @@ public class UserController {
       @Valid @RequestBody ChangePasswordRequest changePasswordRequest) {
     log.debug("REST request to change password for current user");
     userService.changePassword(changePasswordRequest);
-    return ResponseEntity.noContent().build();
-  }
-
-  /**
-   * {@code DELETE  /me} : Delete the current user's account.
-   *
-   * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
-   */
-  @DeleteMapping("/me")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  public ResponseEntity<Void> deleteCurrentUser() {
-    log.debug("REST request to delete current user");
-    userService.deleteCurrentUser();
     return ResponseEntity.noContent().build();
   }
 }

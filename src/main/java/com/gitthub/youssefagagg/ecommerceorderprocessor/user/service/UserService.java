@@ -26,11 +26,6 @@ public interface UserService {
   UserDTO getCurrentUser();
 
 
-  /**
-   * Soft delete the current user's account.
-   */
-  void deleteCurrentUser();
-
 
   /**
    * Change the current user's password.
