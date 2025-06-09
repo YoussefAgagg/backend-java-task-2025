@@ -1,9 +1,9 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.service;
 
-import com.gitthub.youssefagagg.ecommerceorderprocessor.product.dto.InventoryDTO;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.product.dto.NotificationDTO;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.product.dto.OrderDTO;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.product.entity.OrderStatus;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.InventoryDTO;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.NotificationDTO;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.OrderDTO;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
