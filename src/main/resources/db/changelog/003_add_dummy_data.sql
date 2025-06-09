@@ -5,15 +5,15 @@
 -- Add 5 dummy users (passwords are 'password')
 INSERT INTO users (id, username, password_hash, first_name, last_name, email, phone, created_by, created_date,
                    last_modified_by, last_modified_date, version)
-VALUES (1001, 'user1', '$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K', 'John', 'Doe',
+VALUES (1001, 'user1', '$2a$10$1rDWxzZicXW4i1Srm2qcK.MIIS9yf79HtDHkr9Zmuc3qLg1LVGe.O', 'John', 'Doe',
         'john.doe@example.com', '+1234567890', 'system', CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP, 0),
-       (1002, 'user2', '$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K', 'Jane', 'Smith',
+       (1002, 'user2', '$2a$10$1rDWxzZicXW4i1Srm2qcK.MIIS9yf79HtDHkr9Zmuc3qLg1LVGe.O', 'Jane', 'Smith',
         'jane.smith@example.com', '+1234567891', 'system', CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP, 0),
-       (1003, 'user3', '$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K', 'Bob', 'Johnson',
+       (1003, 'user3', '$2a$10$1rDWxzZicXW4i1Srm2qcK.MIIS9yf79HtDHkr9Zmuc3qLg1LVGe.O', 'Bob', 'Johnson',
         'bob.johnson@example.com', '+1234567892', 'system', CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP, 0),
-       (1004, 'user4', '$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K', 'Alice', 'Williams',
+       (1004, 'user4', '$2a$10$1rDWxzZicXW4i1Srm2qcK.MIIS9yf79HtDHkr9Zmuc3qLg1LVGe.O', 'Alice', 'Williams',
         'alice.williams@example.com', '+1234567893', 'system', CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP, 0),
-       (1005, 'user5', '$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K', 'Charlie', 'Brown',
+       (1005, 'user5', '$2a$10$1rDWxzZicXW4i1Srm2qcK.MIIS9yf79HtDHkr9Zmuc3qLg1LVGe.O', 'Charlie', 'Brown',
         'charlie.brown@example.com', '+1234567894', 'system', CURRENT_TIMESTAMP, 'system', CURRENT_TIMESTAMP, 0);
 
 -- Assign ROLE_USER to all dummy users
