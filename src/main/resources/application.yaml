@@ -1,10 +1,13 @@
 spring:
   application:
     name: ecommerce-order-processor
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
   threads:
     virtual:
       enabled: true
   liquibase:
+    contexts: ${spring.profiles.active}
     enabled: true
     drop-first: false
     change-log: classpath:db/changelog/master.yaml
@@ -19,11 +22,8 @@ spring:
         order_inserts: false
     generate-ddl: false
 
-# Encryption configuration
-# This is a placeholder and should be replaced with a secure key in production
-# You can generate a secure key using EncryptionUtil.generateSecretKey()
-encryption:
-  secret-key: VGhpcyBpcyBhIHNlY3VyZSBrZXkgZm9yIGVuY3J5cHRpb24=
 # JWT configuration for local
 jwt:
   secret: LocalRouhMatrouhSecretKeyLocalRouhMatrouhSecretKey
+  expiration: 86400 # 1 day in seconds
+  issuer: ecommerce-order-processor
