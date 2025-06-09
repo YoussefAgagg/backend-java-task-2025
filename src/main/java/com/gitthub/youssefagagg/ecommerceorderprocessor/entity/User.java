@@ -1,6 +1,8 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +24,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 /**
  * User entity for storing user information.
@@ -32,14 +35,16 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @ToString(exclude = {"password", "roles"})
+@JsonIgnoreProperties(ignoreUnknown = true) // ignore all by default
 public class User extends AbstractAuditingEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @JsonProperty
   @NotNull
   @Size(min = 3,
         max = 50)
