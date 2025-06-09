@@ -23,32 +23,6 @@ public interface NotificationService {
   PaginationResponse<NotificationDTO> getCurrentUserNotifications(Pageable pageable);
 
   /**
-   * Get all unread notifications for the current user with pagination.
-   *
-   * @param pageable the pagination information
-   * @return the list of unread notifications
-   */
-  PaginationResponse<NotificationDTO> getCurrentUserUnreadNotifications(Pageable pageable);
-
-  /**
-   * Get all notifications for the current user with the given type and pagination.
-   *
-   * @param type     the notification type
-   * @param pageable the pagination information
-   * @return the list of notifications
-   */
-  PaginationResponse<NotificationDTO> getCurrentUserNotificationsByType(NotificationType type,
-                                                                        Pageable pageable);
-
-  /**
-   * Get a notification by ID.
-   *
-   * @param id the notification ID
-   * @return the notification
-   */
-  NotificationDTO getNotification(Long id);
-
-  /**
    * Mark a notification as read.
    *
    * @param id the notification ID

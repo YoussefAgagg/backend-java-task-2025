@@ -10,6 +10,7 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.exception.custom.CustomE
 import com.gitthub.youssefagagg.ecommerceorderprocessor.mapper.NotificationMapper;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.NotificationRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.UserRepository;
+import com.gitthub.youssefagagg.ecommerceorderprocessor.security.SecurityUtils;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.BaseService;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.NotificationService;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.WebSocketService;
@@ -56,57 +57,7 @@ public class NotificationServiceImpl extends BaseService implements Notification
     return createPaginationResponse(dtoPage);
   }
 
-  @Override
-  @Transactional(readOnly = true)
-  public PaginationResponse<NotificationDTO> getCurrentUserUnreadNotifications(Pageable pageable) {
-    log.debug("Request to get current user unread notifications");
 
-    // Get current user
-    User currentUser = getCurrentUser();
-
-    Page<Notification> result = notificationRepository.findByUserAndIsReadFalse(currentUser,
-                                                                                pageable);
-    Page<NotificationDTO> dtoPage = result.map(notificationMapper::toDto);
-
-    return createPaginationResponse(dtoPage);
-  }
-
-  @Override
-  @Transactional(readOnly = true)
-  public PaginationResponse<NotificationDTO> getCurrentUserNotificationsByType(
-      NotificationType type, Pageable pageable) {
-    log.debug("Request to get current user notifications by type: {}", type);
-
-    // Get current user
-    User currentUser = getCurrentUser();
-
-    Page<Notification> result = notificationRepository.findByUserAndType(currentUser, type,
-                                                                         pageable);
-    Page<NotificationDTO> dtoPage = result.map(notificationMapper::toDto);
-
-    return createPaginationResponse(dtoPage);
-  }
-
-  @Override
-  @Transactional(readOnly = true)
-  public NotificationDTO getNotification(Long id) {
-    log.debug("Request to get Notification : {}", id);
-
-    Notification notification = notificationRepository.findById(id)
-                                                      .orElseThrow(() -> new CustomException(
-                                                          ErrorCode.ENTITY_NOT_FOUND,
-                                                          "Notification not found"));
-
-    // Check if user is authorized to view this notification
-    User currentUser = getCurrentUser();
-
-    if (!notification.getUser().getId().equals(currentUser.getId())) {
-      throw new CustomException(ErrorCode.ACCESS_DENIED,
-                                "Not authorized to view this notification");
-    }
-
-    return notificationMapper.toDto(notification);
-  }
 
   @Override
   @Transactional
@@ -119,9 +70,9 @@ public class NotificationServiceImpl extends BaseService implements Notification
                                                           "Notification not found"));
 
     // Check if user is authorized to mark this notification as read
-    User currentUser = getCurrentUser();
+    String currentUser = SecurityUtils.getCurrentUserUserName().orElseThrow();
 
-    if (!notification.getUser().getId().equals(currentUser.getId())) {
+    if (!notification.getUser().getUsername().equals(currentUser)) {
       throw new CustomException(ErrorCode.ACCESS_DENIED,
                                 "Not authorized to mark this notification as read");
     }
@@ -145,26 +96,18 @@ public class NotificationServiceImpl extends BaseService implements Notification
 
     // Get current user
     User currentUser = getCurrentUser();
-
-    // Get all unread notifications before marking them as read
-    Page<Notification> unreadNotifications = notificationRepository.findByUserAndIsReadFalse(
-        currentUser, Pageable.unpaged());
-
     // Mark all as read
     int count = notificationRepository.markAllAsRead(currentUser);
 
-    if (count > 0) {
-      // Send real-time update for each notification that was marked as read
-      unreadNotifications.forEach(notification -> {
-        notification.setIsRead(true); // Update the local object
-        NotificationDTO notificationDTO = notificationMapper.toDto(notification);
-        webSocketService.sendNotification(currentUser.getId(), notificationDTO);
-      });
+    // Flush to ensure changes are committed to the database
+    notificationRepository.flush();
 
+    if (count > 0) {
       // Also send an update for the unread count (which is now 0)
       webSocketService.sendNotification(currentUser.getId(),
                                         createCountNotification(currentUser.getId(), 0L));
     }
+
 
     return count;
   }
