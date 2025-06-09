@@ -3,5 +3,5 @@ databaseChangeLog:
       file: 001_users_schema_migrations.yaml
       relativeToChangelogFile: true
   - include:
-      file: 002_product_schema_migrations.yaml
+      file: 002_product_order_audit_logs_notification_schema_migrations.yaml
       relativeToChangelogFile: true
