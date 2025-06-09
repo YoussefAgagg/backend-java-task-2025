@@ -3,10 +3,8 @@ package com.gitthub.youssefagagg.ecommerceorderprocessor.dto;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.Order;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.OrderStatus;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +30,8 @@ public class OrderDTO extends AbstractAuditingEntityDto {
 
   private String userName;
 
-  @NotNull
   private OrderStatus status;
 
-  @NotNull
-  @DecimalMin(value = "0.0",
-              inclusive = true)
   private BigDecimal totalAmount;
 
   @Valid
