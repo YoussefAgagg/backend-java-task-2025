@@ -402,6 +402,7 @@ public class OrderServiceImpl extends BaseService implements OrderService {
 
     // Convert to DTO and send real-time updates
     OrderDTO result = orderMapper.toDto(order);
+    log.info("sending cancellation notification for order: {}", order.getId());
     sendStatusUpdateNotifications(order, oldStatus, result);
 
     return result;
@@ -480,7 +481,9 @@ public class OrderServiceImpl extends BaseService implements OrderService {
    */
   private void sendStatusUpdateNotifications(Order order, OrderStatus oldStatus,
                                              OrderDTO orderDTO) {
+    log.info("sending status update notifications for order: {}", order.getId());
     webSocketService.sendOrderStatusUpdate(order.getUser().getId(), orderDTO);
+    log.info("sending admin order status change event for order: {}", order.getId());
     webSocketService.sendOrderStatusChangeEvent(order.getId(), oldStatus, order.getStatus());
   }
 
