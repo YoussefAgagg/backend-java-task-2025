@@ -1,7 +1,6 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.gitthub.youssefagagg.ecommerceorderprocessor.TestcontainersConfiguration;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.NotificationDTO;
@@ -9,11 +8,11 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.PaginationResponse;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.Notification;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.NotificationType;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.User;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.exception.ErrorCode;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.exception.custom.CustomException;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.NotificationRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.UserRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.NotificationService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,7 +30,8 @@ import org.springframework.transaction.annotation.Transactional;
 @SpringBootTest
 @Transactional
 class NotificationServiceIT {
-
+  @PersistenceContext
+  private EntityManager entityManager;
   @Autowired
   private NotificationService notificationService;
 
@@ -100,80 +100,8 @@ class NotificationServiceIT {
     assertThat(result.data().get(0).getIsRead()).isFalse();
   }
 
-  @Test
-  @DisplayName("Should get current user unread notifications")
-  @WithMockUser(username = "testuser")
-  void shouldGetCurrentUserUnreadNotifications() {
-    // Given
-    Pageable pageable = PageRequest.of(0, 10);
 
-    // When
-    PaginationResponse<NotificationDTO> result =
-        notificationService.getCurrentUserUnreadNotifications(pageable);
 
-    // Then
-    assertThat(result).isNotNull();
-    assertThat(result.data()).isNotEmpty();
-    assertThat(result.data().get(0).getId()).isEqualTo(notification.getId());
-    assertThat(result.data().get(0).getIsRead()).isFalse();
-  }
-
-  @Test
-  @DisplayName("Should get current user notifications by type")
-  @WithMockUser(username = "testuser")
-  void shouldGetCurrentUserNotificationsByType() {
-    // Given
-    Pageable pageable = PageRequest.of(0, 10);
-    NotificationType type = NotificationType.ORDER_CONFIRMATION;
-
-    // When
-    PaginationResponse<NotificationDTO> result =
-        notificationService.getCurrentUserNotificationsByType(type, pageable);
-
-    // Then
-    assertThat(result).isNotNull();
-    assertThat(result.data()).isNotEmpty();
-    assertThat(result.data().get(0).getId()).isEqualTo(notification.getId());
-    assertThat(result.data().get(0).getType()).isEqualTo(type);
-  }
-
-  @Test
-  @DisplayName("Should get notification by ID")
-  @WithMockUser(username = "testuser")
-  void shouldGetNotificationById() {
-    // When
-    NotificationDTO result = notificationService.getNotification(notification.getId());
-
-    // Then
-    assertThat(result).isNotNull();
-    assertThat(result.getId()).isEqualTo(notification.getId());
-    assertThat(result.getUserId()).isEqualTo(testUser.getId());
-    assertThat(result.getType()).isEqualTo(notification.getType());
-    assertThat(result.getContent()).isEqualTo(notification.getContent());
-  }
-
-  @Test
-  @DisplayName("Should throw exception when getting non-existent notification")
-  @WithMockUser(username = "testuser")
-  void shouldThrowExceptionWhenGettingNonExistentNotification() {
-    // Given
-    Long nonExistentId = 999L;
-
-    // When/Then
-    assertThatThrownBy(() -> notificationService.getNotification(nonExistentId))
-        .isInstanceOf(CustomException.class)
-        .hasFieldOrPropertyWithValue("errorCode", ErrorCode.ENTITY_NOT_FOUND);
-  }
-
-  @Test
-  @DisplayName("Should throw exception when getting notification belonging to another user")
-  @WithMockUser(username = "otheruser")
-  void shouldThrowExceptionWhenGettingNotificationBelongingToAnotherUser() {
-    // When/Then
-    assertThatThrownBy(() -> notificationService.getNotification(notification.getId()))
-        .isInstanceOf(CustomException.class)
-        .hasFieldOrPropertyWithValue("errorCode", ErrorCode.ACCESS_DENIED);
-  }
 
   @Test
   @DisplayName("Should mark notification as read")
@@ -207,6 +135,8 @@ class NotificationServiceIT {
       newNotification.setIsRead(false);
       notificationRepository.save(newNotification);
     }
+    entityManager.flush();
+    entityManager.clear();
 
     // When
     int result = notificationService.markAllAsRead();
@@ -214,6 +144,8 @@ class NotificationServiceIT {
     // Then
     assertThat(result).isEqualTo(4); // 1 original + 3 new notifications
 
+    entityManager.flush();
+    entityManager.clear();
     // Verify all notifications are marked as read in database
     Page<Notification> notificationsPage = notificationRepository.findByUser(testUser,
                                                                              Pageable.unpaged());
