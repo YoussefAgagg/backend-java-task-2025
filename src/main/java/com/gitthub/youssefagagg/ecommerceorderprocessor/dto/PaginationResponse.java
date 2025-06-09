@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.data.domain.Page;
 
 /**
  * PaginationResponse is a generic immutable record class used to encapsulate paginated data. It
@@ -46,5 +47,22 @@ public record PaginationResponse<T>(
     if (data == null) {
       data = new ArrayList<>();
     }
+  }
+
+  /**
+   * Create a PaginationResponse from a Page.
+   *
+   * @param page the page
+   * @param <T>  the type of the page
+   * @return the pagination response
+   */
+  public static <T> PaginationResponse<T> createPaginationResponse(Page<T> page) {
+    return new PaginationResponse<>(
+        page.getContent(),
+        page.getTotalElements(),
+        page.getTotalPages(),
+        page.getNumber(),
+        page.getSize()
+    );
   }
 }
