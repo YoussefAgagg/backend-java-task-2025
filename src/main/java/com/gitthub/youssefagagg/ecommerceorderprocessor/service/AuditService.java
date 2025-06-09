@@ -48,14 +48,6 @@ public interface AuditService {
   AuditLogDTO getAuditLog(Long id);
 
   /**
-   * Create an audit log.
-   *
-   * @param auditLogDTO the audit log to create
-   * @return the created audit log
-   */
-  AuditLogDTO createAuditLog(AuditLogDTO auditLogDTO);
-
-  /**
    * Asynchronously create an audit log for a create action. The object will be converted to JSON
    * internally.
    *

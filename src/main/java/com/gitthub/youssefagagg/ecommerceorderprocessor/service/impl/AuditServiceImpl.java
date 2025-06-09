@@ -11,10 +11,8 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.AuditLogRepos
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.UserRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.AuditService;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.BaseService;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -49,18 +47,11 @@ public class AuditServiceImpl extends BaseService implements AuditService {
     log.debug("Request to get AuditLogs for entity type: {} and entity ID: {}", entityType,
               entityId);
 
-    List<AuditLog> auditLogs = auditLogRepository.findByEntityTypeAndEntityIdOrderByCreatedDateDesc(
-        entityType, entityId);
+    var auditLogs = auditLogRepository.findByEntityTypeAndEntityIdOrderByCreatedDateDesc(
+        entityType, entityId, pageable);
 
-    // Create a page from the list
-    int start = (int) pageable.getOffset();
-    int end = Math.min((start + pageable.getPageSize()), auditLogs.size());
-    List<AuditLog> pageContent = auditLogs.subList(start, end);
-    Page<AuditLog> page = new PageImpl<>(pageContent, pageable, auditLogs.size());
 
-    Page<AuditLogDTO> dtoPage = page.map(auditLogMapper::toDto);
-
-    return createPaginationResponse(dtoPage);
+    return createPaginationResponse(auditLogs.map(auditLogMapper::toDto));
   }
 
   @Override
@@ -97,16 +88,6 @@ public class AuditServiceImpl extends BaseService implements AuditService {
                                                                     "AuditLog not found"));
   }
 
-  @Override
-  @Transactional
-  public AuditLogDTO createAuditLog(AuditLogDTO auditLogDTO) {
-    log.debug("Request to create AuditLog : {}", auditLogDTO);
-
-    AuditLog auditLog = auditLogMapper.toEntity(auditLogDTO);
-    auditLog = auditLogRepository.save(auditLog);
-
-    return auditLogMapper.toDto(auditLog);
-  }
 
   @Override
   @Async("taskExecutor")

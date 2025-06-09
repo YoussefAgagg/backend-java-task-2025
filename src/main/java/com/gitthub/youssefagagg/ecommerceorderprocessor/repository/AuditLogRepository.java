@@ -1,7 +1,6 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.repository;
 
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.AuditLog;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,8 +21,9 @@ public interface AuditLogRepository
    * @param entityId   the entity ID
    * @return the list of audit logs
    */
-  List<AuditLog> findByEntityTypeAndEntityIdOrderByCreatedDateDesc(String entityType,
-                                                                   Long entityId);
+  Page<AuditLog> findByEntityTypeAndEntityIdOrderByCreatedDateDesc(String entityType,
+                                                                   Long entityId,
+                                                                   Pageable pageable);
 
   /**
    * Find audit logs by entity type.
