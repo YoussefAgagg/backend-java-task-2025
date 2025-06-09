@@ -5,3 +5,7 @@ databaseChangeLog:
   - include:
       file: 002_product_order_audit_logs_notification_schema_migrations.yaml
       relativeToChangelogFile: true
+  - include:
+      context: local,dev
+      file: 003_add_dummy_data.sql
+      relativeToChangelogFile: true
