@@ -16,7 +16,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.ProductReposi
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.UserRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.AuditService;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,43 +81,60 @@ class AuditServiceIT {
   }
 
   @Test
-  @DisplayName("Should create audit log")
-  void shouldCreateAuditLog() {
+  @DisplayName("Should create audit log asynchronously")
+  void shouldCreateAuditLog() throws Exception {
+    // Given
+    String entityType = auditLogDTO.getEntityType();
+    Long entityId = auditLogDTO.getEntityId();
+
     // When
-    AuditLogDTO result = auditService.createAuditLog(auditLogDTO);
+    auditService.createLogAsync(entityType, entityId, testProduct);
+
+    // Wait for async operation to complete
+    TimeUnit.SECONDS.sleep(1);
 
     // Then
-    assertThat(result).isNotNull();
-    assertThat(result.getId()).isNotNull();
-    assertThat(result.getEntityType()).isEqualTo(auditLogDTO.getEntityType());
-    assertThat(result.getEntityId()).isEqualTo(auditLogDTO.getEntityId());
-    assertThat(result.getAction()).isEqualTo(auditLogDTO.getAction());
-    assertThat(result.getChanges()).isEqualTo(auditLogDTO.getChanges());
+    Pageable pageable = PageRequest.of(0, 10);
+    Page<AuditLog> auditLogsPage =
+        auditLogRepository.findByEntityTypeAndEntityIdOrderByCreatedDateDesc(
+            entityType, entityId, pageable);
 
-    // Verify audit log is saved in database
-    AuditLog savedAuditLog = auditLogRepository.findById(result.getId()).orElseThrow();
-    assertThat(savedAuditLog.getEntityType()).isEqualTo(auditLogDTO.getEntityType());
-    assertThat(savedAuditLog.getEntityId()).isEqualTo(auditLogDTO.getEntityId());
-    assertThat(savedAuditLog.getAction()).isEqualTo(auditLogDTO.getAction());
-    assertThat(savedAuditLog.getChanges()).isEqualTo(auditLogDTO.getChanges());
+    assertThat(auditLogsPage.getContent()).isNotEmpty();
+    AuditLog savedAuditLog = auditLogsPage.getContent().get(0);
+    assertThat(savedAuditLog.getEntityType()).isEqualTo(entityType);
+    assertThat(savedAuditLog.getEntityId()).isEqualTo(entityId);
+    assertThat(savedAuditLog.getAction()).isEqualTo("CREATE");
   }
 
   @Test
   @DisplayName("Should get audit log by ID")
-  void shouldGetAuditLogById() {
+  void shouldGetAuditLogById() throws Exception {
     // Given
-    AuditLogDTO createdAuditLog = auditService.createAuditLog(auditLogDTO);
+    String entityType = auditLogDTO.getEntityType();
+    Long entityId = auditLogDTO.getEntityId();
+
+    // Create an audit log asynchronously
+    auditService.createLogAsync(entityType, entityId, testProduct);
+
+    // Wait for async operation to complete
+    TimeUnit.SECONDS.sleep(1);
+
+    // Get the created audit log
+    Pageable pageable = PageRequest.of(0, 10);
+    Page<AuditLog> auditLogsPage =
+        auditLogRepository.findByEntityTypeAndEntityIdOrderByCreatedDateDesc(
+            entityType, entityId, pageable);
+    Long auditLogId = auditLogsPage.getContent().get(0).getId();
 
     // When
-    AuditLogDTO result = auditService.getAuditLog(createdAuditLog.getId());
+    AuditLogDTO result = auditService.getAuditLog(auditLogId);
 
     // Then
     assertThat(result).isNotNull();
-    assertThat(result.getId()).isEqualTo(createdAuditLog.getId());
-    assertThat(result.getEntityType()).isEqualTo(auditLogDTO.getEntityType());
-    assertThat(result.getEntityId()).isEqualTo(auditLogDTO.getEntityId());
-    assertThat(result.getAction()).isEqualTo(auditLogDTO.getAction());
-    assertThat(result.getChanges()).isEqualTo(auditLogDTO.getChanges());
+    assertThat(result.getId()).isEqualTo(auditLogId);
+    assertThat(result.getEntityType()).isEqualTo(entityType);
+    assertThat(result.getEntityId()).isEqualTo(entityId);
+    assertThat(result.getAction()).isEqualTo("CREATE");
   }
 
   @Test
@@ -134,23 +151,34 @@ class AuditServiceIT {
 
   @Test
   @DisplayName("Should get audit logs for entity")
-  void shouldGetAuditLogsForEntity() {
+  void shouldGetAuditLogsForEntity() throws Exception {
     // Given
-    auditService.createAuditLog(auditLogDTO);
+    String entityType = "Product";
+    Long entityId = testProduct.getId();
 
-    // Create another audit log for the same entity
-    AuditLogDTO updateAuditLogDTO = new AuditLogDTO();
-    updateAuditLogDTO.setEntityType("Product");
-    updateAuditLogDTO.setEntityId(testProduct.getId());
-    updateAuditLogDTO.setAction("UPDATE");
-    updateAuditLogDTO.setChanges("{\"name\":\"Updated Product\",\"price\":109.99}");
-    auditService.createAuditLog(updateAuditLogDTO);
+    // Create first audit log asynchronously (CREATE)
+    auditService.createLogAsync(entityType, entityId, testProduct);
+
+    // Wait for async operation to complete
+    TimeUnit.SECONDS.sleep(1);
+
+    // Create second audit log asynchronously (UPDATE)
+    Product updatedProduct = new Product();
+    updatedProduct.setId(testProduct.getId());
+    updatedProduct.setName("Updated Product");
+    updatedProduct.setDescription(testProduct.getDescription());
+    updatedProduct.setPrice(BigDecimal.valueOf(109.99));
+
+    auditService.updateLogAsync(entityType, entityId, null, testProduct, updatedProduct);
+
+    // Wait for async operation to complete
+    TimeUnit.SECONDS.sleep(1);
 
     Pageable pageable = PageRequest.of(0, 10);
 
     // When
-    PaginationResponse<AuditLogDTO> result = auditService.getAuditLogsForEntity("Product",
-                                                                                testProduct.getId(),
+    PaginationResponse<AuditLogDTO> result = auditService.getAuditLogsForEntity(entityType,
+                                                                                entityId,
                                                                                 pageable);
 
     // Then
@@ -183,11 +211,14 @@ class AuditServiceIT {
     TimeUnit.SECONDS.sleep(1);
 
     // Then
-    List<AuditLog> auditLogs = auditLogRepository.findByEntityTypeAndEntityIdOrderByCreatedDateDesc(
-        entityType, entityId);
-    assertThat(auditLogs).isNotEmpty();
-    assertThat(auditLogs.get(0).getEntityType()).isEqualTo(entityType);
-    assertThat(auditLogs.get(0).getEntityId()).isEqualTo(entityId);
-    assertThat(auditLogs.get(0).getAction()).isEqualTo("CREATE");
+    Pageable pageable = PageRequest.of(0, 10);
+    Page<AuditLog> auditLogsPage =
+        auditLogRepository.findByEntityTypeAndEntityIdOrderByCreatedDateDesc(
+            entityType, entityId, pageable);
+    assertThat(auditLogsPage.getContent()).isNotEmpty();
+    AuditLog auditLog = auditLogsPage.getContent().get(0);
+    assertThat(auditLog.getEntityType()).isEqualTo(entityType);
+    assertThat(auditLog.getEntityId()).isEqualTo(entityId);
+    assertThat(auditLog.getAction()).isEqualTo("CREATE");
   }
 }

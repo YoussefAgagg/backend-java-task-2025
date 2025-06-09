@@ -96,8 +96,9 @@ class AuditServiceImplTest {
     // Given
     String entityType = "Product";
     Long entityId = 100L;
-    when(auditLogRepository.findByEntityTypeAndEntityIdOrderByCreatedDateDesc(entityType, entityId))
-        .thenReturn(auditLogs);
+    when(auditLogRepository.findByEntityTypeAndEntityIdOrderByCreatedDateDesc(entityType, entityId,
+                                                                              pageable))
+        .thenReturn(auditLogPage);
 
     // When
     PaginationResponse<AuditLogDTO> result = auditService.getAuditLogsForEntity(entityType,
@@ -112,7 +113,8 @@ class AuditServiceImplTest {
     assertThat(result.totalCount()).isEqualTo(1);
 
     verify(auditLogRepository).findByEntityTypeAndEntityIdOrderByCreatedDateDesc(entityType,
-                                                                                 entityId);
+                                                                                 entityId,
+                                                                                 pageable);
   }
 
   @Test
@@ -192,27 +194,8 @@ class AuditServiceImplTest {
     verify(auditLogRepository).findById(nonExistentId);
   }
 
-  @Test
-  @DisplayName("Should create audit log")
-  void shouldCreateAuditLog() {
-    // Given
-    when(auditLogRepository.save(any(AuditLog.class))).thenReturn(auditLog);
-    when(auditLogMapper.toEntity(auditLogDTO)).thenReturn(auditLog);
-
-    // When
-    AuditLogDTO result = auditService.createAuditLog(auditLogDTO);
-
-    // Then
-    assertThat(result).isNotNull();
-    assertThat(result.getId()).isEqualTo(auditLog.getId());
-    assertThat(result.getEntityType()).isEqualTo(auditLog.getEntityType());
-    assertThat(result.getEntityId()).isEqualTo(auditLog.getEntityId());
-    assertThat(result.getAction()).isEqualTo(auditLog.getAction());
-    assertThat(result.getChanges()).isEqualTo(auditLog.getChanges());
-
-    verify(auditLogMapper).toEntity(auditLogDTO);
-    verify(auditLogRepository).save(auditLog);
-  }
+  // Test for createAuditLog has been removed as the method no longer exists in the service
+  // The functionality is now tested in shouldCreateLogAsync
 
   @Test
   @DisplayName("Should create log asynchronously")
