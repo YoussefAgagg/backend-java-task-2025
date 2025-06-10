@@ -32,7 +32,22 @@ springdoc:
     enabled: true
   swagger-ui:
     enabled: true
-
+management:
+  endpoints:
+    web:
+      base-path: /management
+      exposure:
+        include: health
+  endpoint:
+    health:
+      access: unrestricted
+      show-details: never
+      show-components: when_authorized
+    info:
+      access: unrestricted
+  metrics:
+    enable:
+      all: true
 
 logging:
   pattern:
