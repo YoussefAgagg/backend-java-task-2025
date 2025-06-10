@@ -47,8 +47,8 @@
                         <input class="form-control" id="serverUrl" type="text" value="ws://localhost:8080/ws">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="userId">User ID (for user-specific topics)</label>
-                        <input class="form-control" id="userId" type="number" value="1">
+                        <label class="form-label" for="username">Username (for user-specific topics)</label>
+                        <input class="form-control" id="username" type="text" value="admin">
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="token">JWT Token (if required)</label>
@@ -75,13 +75,13 @@
                     <div class="form-check mb-2">
                         <input class="form-check-input" disabled id="ordersTopic" type="checkbox">
                         <label class="form-check-label" for="ordersTopic">
-                            /topic/orders/{userId}
+                            /topic/orders/{username}
                         </label>
                     </div>
                     <div class="form-check mb-2">
                         <input class="form-check-input" disabled id="notificationsTopic" type="checkbox">
                         <label class="form-check-label" for="notificationsTopic">
-                            /topic/notifications/{userId}
+                            /topic/notifications/{username}
                         </label>
                     </div>
                     <div class="form-check mb-2">
@@ -124,7 +124,7 @@
     const connectButton = document.getElementById('connectButton');
     const disconnectButton = document.getElementById('disconnectButton');
     const serverUrlInput = document.getElementById('serverUrl');
-    const userIdInput = document.getElementById('userId');
+    const usernameInput = document.getElementById('username');
     const tokenInput = document.getElementById('token');
     const messagesContainer = document.getElementById('messages');
     const clearMessagesButton = document.getElementById('clearMessages');
@@ -242,13 +242,13 @@
     });
 
     ordersTopicCheckbox.addEventListener('change', function () {
-        const userId = userIdInput.value;
-        handleSubscription(`/topic/orders/${userId}`, 'ordersTopic');
+        const username = usernameInput.value;
+        handleSubscription(`/topic/orders/${username}`, 'ordersTopic');
     });
 
     notificationsTopicCheckbox.addEventListener('change', function () {
-        const userId = userIdInput.value;
-        handleSubscription(`/topic/notifications/${userId}`, 'notificationsTopic');
+        const username = usernameInput.value;
+        handleSubscription(`/topic/notifications/${username}`, 'notificationsTopic');
     });
 
     adminOrderStatusTopicCheckbox.addEventListener('change', function () {
@@ -299,8 +299,8 @@
     }
 
     // Update topics when user ID changes
-    userIdInput.addEventListener('change', function () {
-        const userId = userIdInput.value;
+    usernameInput.addEventListener('change', function () {
+        const username = usernameInput.value;
 
         // Update subscriptions if they exist
         if (ordersTopicCheckbox.checked) {
@@ -309,7 +309,7 @@
                 subscriptions[oldOrdersTopic].unsubscribe();
                 delete subscriptions[oldOrdersTopic];
 
-                const newOrdersTopic = `/topic/orders/${userId}`;
+                const newOrdersTopic = `/topic/orders/${username}`;
                 subscriptions[newOrdersTopic] = stompClient.subscribe(newOrdersTopic, function (message) {
                     try {
                         const parsedMessage = JSON.parse(message.body);
@@ -330,7 +330,7 @@
                 subscriptions[oldNotificationsTopic].unsubscribe();
                 delete subscriptions[oldNotificationsTopic];
 
-                const newNotificationsTopic = `/topic/notifications/${userId}`;
+                const newNotificationsTopic = `/topic/notifications/${username}`;
                 subscriptions[newNotificationsTopic] = stompClient.subscribe(newNotificationsTopic, function (message) {
                     try {
                         const parsedMessage = JSON.parse(message.body);
