@@ -1,5 +1,6 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.config;
 
+import com.gitthub.youssefagagg.ecommerceorderprocessor.security.websocket.WebSocketAuthenticationInterceptor;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.security.websocket.WebSocketSecurityInterceptor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
   private final WebSocketSecurityInterceptor webSocketSecurityInterceptor;
+  private final WebSocketAuthenticationInterceptor webSocketAuthenticationInterceptor;
 
   @Override
   public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -35,7 +37,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     // Register the "/ws" endpoint, enabling SockJS fallback options
     registry.addEndpoint("/ws")
-            .setAllowedOriginPatterns("*");
+            .setAllowedOriginPatterns("*")
+            .addInterceptors(webSocketAuthenticationInterceptor);
   }
 
   @Override
