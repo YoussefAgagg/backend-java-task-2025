@@ -32,24 +32,24 @@ public class WebSocketService {
   /**
    * Send order status update to specific user.
    *
-   * @param userId   the user ID
+   * @param username   the user ID
    * @param orderDTO the updated order
    */
-  public void sendOrderStatusUpdate(Long userId, OrderDTO orderDTO) {
+  public void sendOrderStatusUpdate(String username, OrderDTO orderDTO) {
     log.debug("Sending order status update for order ID: {} to user ID: {}", orderDTO.getId(),
-              userId);
-    messagingTemplate.convertAndSend("/topic/orders/" + userId, orderDTO);
+              username);
+    messagingTemplate.convertAndSend("/topic/orders/" + username, orderDTO);
   }
 
   /**
    * Send notification to specific user.
    *
-   * @param userId          the user ID
+   * @param username          the username of the recipient
    * @param notificationDTO the notification
    */
-  public void sendNotification(Long userId, NotificationDTO notificationDTO) {
-    log.debug("Sending notification to user ID: {}", userId);
-    messagingTemplate.convertAndSend("/topic/notifications/" + userId, notificationDTO);
+  public void sendNotification(String username, NotificationDTO notificationDTO) {
+    log.debug("Sending notification to user ID: {}", username);
+    messagingTemplate.convertAndSend("/topic/notifications/" + username, notificationDTO);
   }
 
   /**

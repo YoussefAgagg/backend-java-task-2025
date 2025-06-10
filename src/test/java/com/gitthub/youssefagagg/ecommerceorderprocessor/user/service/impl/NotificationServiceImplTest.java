@@ -186,7 +186,7 @@ class NotificationServiceImplTest {
 
     verify(notificationRepository).findById(notification.getId());
     verify(notificationRepository).save(notification);
-    verify(webSocketService).sendNotification(eq(user.getId()), any(NotificationDTO.class));
+    verify(webSocketService).sendNotification(eq(user.getUsername()), any(NotificationDTO.class));
   }
 
   @Test
@@ -240,7 +240,7 @@ class NotificationServiceImplTest {
     // Then
     assertThat(result).isEqualTo(1);
     verify(notificationRepository).markAllAsRead(user);
-    verify(webSocketService, times(1)).sendNotification(eq(user.getId()),
+    verify(webSocketService, times(1)).sendNotification(eq(user.getUsername()),
                                                         any(NotificationDTO.class));
   }
 
@@ -280,7 +280,7 @@ class NotificationServiceImplTest {
     // Then
     verify(notificationRepository).save(any(Notification.class));
     verify(notificationRepository).countByUserAndIsReadFalse(user);
-    verify(webSocketService, times(2)).sendNotification(eq(user.getId()),
+    verify(webSocketService, times(2)).sendNotification(eq(user.getUsername()),
                                                         any(NotificationDTO.class));
   }
 

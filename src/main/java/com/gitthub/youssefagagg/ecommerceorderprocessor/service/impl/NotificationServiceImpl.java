@@ -84,7 +84,7 @@ public class NotificationServiceImpl extends BaseService implements Notification
     NotificationDTO notificationDTO = notificationMapper.toDto(notification);
 
     // Send real-time update
-    webSocketService.sendNotification(notification.getUser().getId(), notificationDTO);
+    webSocketService.sendNotification(notification.getUser().getUsername(), notificationDTO);
 
     return notificationDTO;
   }
@@ -104,7 +104,7 @@ public class NotificationServiceImpl extends BaseService implements Notification
 
     if (count > 0) {
       // Also send an update for the unread count (which is now 0)
-      webSocketService.sendNotification(currentUser.getId(),
+      webSocketService.sendNotification(currentUser.getUsername(),
                                         createCountNotification(currentUser.getId(), 0L));
     }
 
@@ -139,11 +139,11 @@ public class NotificationServiceImpl extends BaseService implements Notification
     NotificationDTO notificationDTO = notificationMapper.toDto(notification);
 
     // Send real-time update
-    webSocketService.sendNotification(user.getId(), notificationDTO);
+    webSocketService.sendNotification(user.getUsername(), notificationDTO);
 
     // Also send an update for the unread count
     long unreadCount = notificationRepository.countByUserAndIsReadFalse(user);
-    webSocketService.sendNotification(user.getId(),
+    webSocketService.sendNotification(user.getUsername(),
                                       createCountNotification(user.getId(), unreadCount));
 
   }

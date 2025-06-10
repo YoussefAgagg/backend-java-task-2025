@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -279,7 +280,7 @@ class OrderServiceImplTest {
     verify(paymentService).processPayment(any(PaymentDTO.class));
     verify(notificationService).createNotification(any(User.class), any(), anyString());
     verify(auditService).createLogAsync(anyString(), anyLong(), any(Order.class));
-    verify(webSocketService).sendOrderStatusUpdate(anyLong(), any(OrderDTO.class));
+    verify(webSocketService).sendOrderStatusUpdate(eq("testuser"), any(OrderDTO.class));
   }
 
   @Test
@@ -467,7 +468,7 @@ class OrderServiceImplTest {
     verify(notificationService).createNotification(any(User.class), any(), anyString());
     verify(auditService).updateLogAsync(anyString(), anyLong(), anyString(), any(Order.class),
                                         any(Order.class));
-    verify(webSocketService).sendOrderStatusUpdate(anyLong(), any(OrderDTO.class));
+    verify(webSocketService).sendOrderStatusUpdate(eq("testuser"), any(OrderDTO.class));
     verify(webSocketService).sendOrderStatusChangeEvent(anyLong(), any(OrderStatus.class),
                                                         any(OrderStatus.class));
   }
@@ -529,7 +530,7 @@ class OrderServiceImplTest {
     verify(orderRepository).save(order);
     verify(auditService).updateLogAsync(anyString(), anyLong(), anyString(), any(Order.class),
                                         any(Order.class));
-    verify(webSocketService).sendOrderStatusUpdate(anyLong(), any(OrderDTO.class));
+    verify(webSocketService).sendOrderStatusUpdate(eq("testuser"), any(OrderDTO.class));
     verify(webSocketService).sendOrderStatusChangeEvent(anyLong(), any(OrderStatus.class),
                                                         any(OrderStatus.class));
   }
