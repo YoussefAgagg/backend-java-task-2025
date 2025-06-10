@@ -527,9 +527,11 @@ public class OrderServiceImpl extends BaseService implements OrderService {
     switch (status) {
       case PAID:
         // Process payment confirmation logic would go here
+        createPaymentConfirmationNotification(order);
         break;
       case PROCESSING:
         // Process order fulfillment logic would go here
+        createProcessingNotification(order);
         break;
       case SHIPPED:
         createShippingNotification(order);
@@ -553,6 +555,28 @@ public class OrderServiceImpl extends BaseService implements OrderService {
         order.getUser(),
         NotificationType.SHIPPING_UPDATE,
         "Order #" + order.getId() + " has been shipped."
+                                          );
+  }
+
+  /**
+   * Create a payment confirmation notification for an order
+   */
+  private void createPaymentConfirmationNotification(Order order) {
+    notificationService.createNotification(
+        order.getUser(),
+        NotificationType.PAYMENT_CONFIRMATION,
+        "Payment for order #" + order.getId() + " has been confirmed."
+                                          );
+  }
+
+  /**
+   * Create a processing notification for an order
+   */
+  private void createProcessingNotification(Order order) {
+    notificationService.createNotification(
+        order.getUser(),
+        NotificationType.ORDER_CONFIRMATION,
+        "Order #" + order.getId() + " is now being processed."
                                           );
   }
 
