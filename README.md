@@ -14,6 +14,7 @@ A Spring Boot application for processing e-commerce orders with a focus on relia
 - [Concurrency Control](#concurrency-control)
 - [Asynchronous Processing](#asynchronous-processing)
 - [API Documentation](#api-documentation)
+- [Postman Collection](#postman-collection)
 - [WebSocket Testing](#websocket-testing)
 - [Authentication and Authorization](#authentication-and-authorization)
 - [Distributed Tracing](#distributed-tracing)
@@ -181,6 +182,29 @@ The API is documented using Springdoc OpenAPI (Swagger):
 - **OpenAPI Specification**: Available at `/v3/api-docs`
 - **Endpoint Documentation**: All endpoints are documented with descriptions, parameters, and response types
 - **Authentication**: The documentation includes information about authentication requirements
+
+## Postman Collection
+
+The repository includes a Postman collection and environment for testing the API:
+
+### Importing the Collection
+
+1. Download [Postman](https://www.postman.com/downloads/) if you don't have it installed
+2. In Postman, click on "Import" in the top left corner
+3. Select the `E-commerce.postman_collection.json` and `e-commerce-local-env.postman_environment.json` files from the
+   repository
+4. The collection and environment will be imported into Postman
+
+### Collection Overview
+
+The Postman collection is organized into the following folders:
+
+- **E-commerce Auth API**: User registration and authentication
+- **E-commerce User API**: User profile management
+- **E-commerce Product Admin API**: Product management (admin only)
+- **E-commerce Product API**: Product browsing (public)
+- **E-commerce Order API**: Order creation and management
+- **E-commerce Order Admin API**: Order administration (admin only)
 
 ## WebSocket Testing
 
