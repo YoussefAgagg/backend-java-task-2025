@@ -613,6 +613,13 @@ public class OrderServiceImpl extends BaseService implements OrderService {
   @Transactional(readOnly = true)
   @Override
   public List<DailySalesReportDTO> getDailySalesReport(LocalDate startDate, LocalDate endDate) {
+    if (startDate == null) {
+      startDate = LocalDate.now();
+    }
+
+    if (endDate == null) {
+      endDate = LocalDate.now();
+    }
     log.debug("Service request to get daily sales report from {} to {}", startDate, endDate);
 
     Instant startInstant = startDate.atStartOfDay(ZoneId.systemDefault()).toInstant();

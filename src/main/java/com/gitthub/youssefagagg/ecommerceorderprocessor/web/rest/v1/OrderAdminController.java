@@ -100,8 +100,10 @@ public class OrderAdminController {
       security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
   )
   public ResponseEntity<List<DailySalesReportDTO>> getDailySalesReport(
-      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-      @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+      LocalDate startDate,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+      LocalDate endDate) {
     log.debug("REST request to get daily sales report from {} to {}", startDate, endDate);
     List<DailySalesReportDTO> report = orderService.getDailySalesReport(startDate, endDate);
     return ResponseEntity.ok().body(report);

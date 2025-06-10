@@ -56,7 +56,8 @@ public interface OrderRepository
    */
   @Query(value = "SELECT CAST(created_date AS DATE) as order_date, SUM(total_amount) as total " +
                  "FROM orders " +
-                 "WHERE status = 'PAID' AND created_date BETWEEN ?1 AND ?2 " +
+                 "WHERE status IN ('PAID', 'PROCESSING', 'SHIPPED', 'DELIVERED') AND created_date BETWEEN ?1 AND ?2 "
+                 +
                  "GROUP BY CAST(created_date AS DATE) " +
                  "ORDER BY order_date",
          nativeQuery = true)
