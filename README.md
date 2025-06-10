@@ -14,6 +14,7 @@ A Spring Boot application for processing e-commerce orders with a focus on relia
 - [Concurrency Control](#concurrency-control)
 - [Asynchronous Processing](#asynchronous-processing)
 - [API Documentation](#api-documentation)
+- [WebSocket Testing](#websocket-testing)
 - [Authentication and Authorization](#authentication-and-authorization)
 - [Distributed Tracing](#distributed-tracing)
 - [Rate Limiting](#rate-limiting)
@@ -180,6 +181,49 @@ The API is documented using Springdoc OpenAPI (Swagger):
 - **OpenAPI Specification**: Available at `/v3/api-docs`
 - **Endpoint Documentation**: All endpoints are documented with descriptions, parameters, and response types
 - **Authentication**: The documentation includes information about authentication requirements
+
+## WebSocket Testing
+
+The application includes a WebSocket client HTML file that can be used to test the WebSocket functionality:
+
+### Using the WebSocket Client
+
+1. Start the application locally
+2. Open the `WebSocketClient.html` file in a web browser
+3. Configure the connection:
+  - Server URL: `ws://localhost:8080/ws` (default)
+  - Username: Enter your username (e.g., `admin`)
+  - JWT Token: Paste a valid JWT token (obtain from login API)
+4. Click "Connect" to establish a WebSocket connection
+5. Subscribe to topics by checking the corresponding checkboxes
+6. View received messages in the Messages section
+
+### Available Topics
+
+The WebSocket client supports subscribing to the following topics:
+
+- `/topic/inventory`: Inventory updates
+- `/topic/orders/{username}`: Order updates for a specific user
+- `/topic/notifications/{username}`: Notifications for a specific user
+- `/topic/admin/orders/status`: Order status changes (admin only)
+- `/topic/admin/inventory/low-stock`: Low stock alerts (admin only)
+
+### Authentication
+
+WebSocket connections require JWT authentication. You can:
+
+1. Obtain a JWT token by calling the login API endpoint
+2. Paste the token in the "JWT Token" field in the WebSocket client
+3. The token will be automatically included in the WebSocket connection request
+
+### Example Usage
+
+1. Log in to the application to obtain a JWT token
+2. Open the WebSocket client and enter the token
+3. Connect to the WebSocket server
+4. Subscribe to `/topic/notifications/{your-username}`
+5. Create a new order using the REST API
+6. Observe the order status notifications in the WebSocket client
 
 ## Authentication and Authorization
 
