@@ -1,11 +1,14 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.web.rest.v1;
 
+import static com.gitthub.youssefagagg.ecommerceorderprocessor.util.Constants.OPEN_API_SECURITY_REQUIREMENT;
+
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.OrderDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.PaginationResponse;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.Order;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.OrderStatus;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,11 +47,14 @@ public class OrderController {
    *     order
    */
   @PostMapping
-  @Operation(summary = "Create a new order",
-             description = "Create a new order with the provided details. " +
-                           "Clients can provide an idempotencyKey to prevent duplicate order processing. "
-                           +
-                           "If not provided, a random idempotencyKey will be generated.")
+  @Operation(
+      summary = "Create a new order",
+      description = "Create a new order with the provided details. " +
+                    "Clients can provide an idempotencyKey to prevent duplicate order processing. "
+                    +
+                    "If not provided, a random idempotencyKey will be generated.",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<OrderDTO> createOrder(@Valid @RequestBody OrderDTO orderDTO) {
     log.debug("REST request to save Order : {}", orderDTO);
     OrderDTO result = orderService.createOrder(orderDTO);
@@ -63,7 +69,10 @@ public class OrderController {
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of orders in body
    */
   @GetMapping
-  @Operation(summary = "Get all orders for the current user with pagination")
+  @Operation(
+      summary = "Get all orders for the current user with pagination",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<PaginationResponse<OrderDTO>> getAllOrders(
       Pageable pageable,
       @RequestParam(required = false) OrderStatus status) {
@@ -83,7 +92,10 @@ public class OrderController {
    *     with status {@code 404 (Not Found)}
    */
   @GetMapping("/{id}")
-  @Operation(summary = "Get an order by ID")
+  @Operation(
+      summary = "Get an order by ID",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<OrderDTO> getOrder(@PathVariable Long id) {
     log.debug("REST request to get Order : {}", id);
     OrderDTO orderDTO = orderService.getOrder(id);
@@ -97,7 +109,10 @@ public class OrderController {
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated order
    */
   @PutMapping("/{id}/cancel")
-  @Operation(summary = "Cancel an order")
+  @Operation(
+      summary = "Cancel an order",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<OrderDTO> cancelOrder(@PathVariable Long id) {
     log.debug("REST request to cancel Order : {}", id);
     OrderDTO result = orderService.cancelOrder(id);
@@ -111,7 +126,10 @@ public class OrderController {
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the order status
    */
   @GetMapping("/{id}/status")
-  @Operation(summary = "Get the status of an order")
+  @Operation(
+      summary = "Get the status of an order",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<OrderStatus> getOrderStatus(@PathVariable Long id) {
     log.debug("REST request to get Order status : {}", id);
     OrderStatus status = orderService.getOrderStatus(id);

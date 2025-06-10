@@ -39,7 +39,9 @@ public class ProductController {
    *     body
    */
   @GetMapping
-  @Operation(summary = "Get all products with pagination")
+  @Operation(
+      summary = "Get all products with pagination"
+  )
   public ResponseEntity<PaginationResponse<ProductDTO>> getAllProducts(
       Pageable pageable,
       @RequestParam(required = false) String name) {
@@ -58,7 +60,9 @@ public class ProductController {
    *     with status {@code 404 (Not Found)}
    */
   @GetMapping("/{id}")
-  @Operation(summary = "Get a product by ID")
+  @Operation(
+      summary = "Get a product by ID"
+  )
   public ResponseEntity<ProductDTO> getProduct(@PathVariable Long id) {
     log.debug("REST request to get Product : {}", id);
     ProductDTO productDTO = productService.findOne(id);
@@ -72,7 +76,9 @@ public class ProductController {
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the inventory
    */
   @GetMapping("/{id}/inventory")
-  @Operation(summary = "Get inventory for a product")
+  @Operation(
+      summary = "Get inventory for a product"
+  )
   public ResponseEntity<InventoryDTO> getInventory(@PathVariable Long id) {
     log.debug("REST request to get Inventory for Product : {}", id);
     InventoryDTO inventoryDTO = productService.getInventory(id);

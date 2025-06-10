@@ -1,11 +1,14 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.web.rest.v1;
 
+import static com.gitthub.youssefagagg.ecommerceorderprocessor.util.Constants.OPEN_API_SECURITY_REQUIREMENT;
+
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.DailySalesReportDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.OrderDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.PaginationResponse;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.OrderStatus;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import java.util.List;
@@ -43,7 +46,10 @@ public class OrderAdminController {
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of orders in body
    */
   @GetMapping("/orders")
-  @Operation(summary = "Get all orders with pagination (admin only)")
+  @Operation(
+      summary = "Get all orders with pagination (admin only)",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<PaginationResponse<OrderDTO>> getAllOrders(
       Pageable pageable,
       @RequestParam(required = false) OrderStatus status) {
@@ -62,7 +68,10 @@ public class OrderAdminController {
    * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated order
    */
   @PutMapping("/orders/{id}/status")
-  @Operation(summary = "Update the status of an order (admin only)")
+  @Operation(
+      summary = "Update the status of an order (admin only)",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<OrderDTO> updateOrderStatus(
       @PathVariable Long id,
       @RequestParam OrderStatus status) {
@@ -80,7 +89,10 @@ public class OrderAdminController {
    *     report
    */
   @GetMapping("/reports/daily")
-  @Operation(summary = "Get daily sales report (admin only)")
+  @Operation(
+      summary = "Get daily sales report (admin only)",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<List<DailySalesReportDTO>> getDailySalesReport(
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
       @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {

@@ -5,6 +5,7 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.LoginRequest;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.TokenDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.UserDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,8 @@ public class AuthController {
    */
   @PostMapping("/register")
   @ResponseStatus(HttpStatus.CREATED)
+  @Operation(summary = "Register a new user",
+             description = "Creates a new user account with the provided details")
   public ResponseEntity<UserDTO> register(@Valid @RequestBody CreateUserRequest createUserRequest) {
     log.debug("REST request to register user : {}", createUserRequest.getUsername());
     UserDTO result = authService.register(createUserRequest);
@@ -52,6 +55,8 @@ public class AuthController {
    *     authentication token
    */
   @PostMapping("/login")
+  @Operation(summary = "Authenticate a user",
+             description = "Authenticates a user with the provided credentials and returns a JWT token")
   public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginRequest loginRequest) {
     log.debug("REST request to authenticate user : {}", loginRequest.getUsername());
     TokenDTO result = authService.login(loginRequest);

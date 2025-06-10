@@ -1,11 +1,14 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.web.rest.v1;
 
+import static com.gitthub.youssefagagg.ecommerceorderprocessor.util.Constants.OPEN_API_SECURITY_REQUIREMENT;
+
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.CreateProductDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.InventoryDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.ProductDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.Product;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -46,7 +49,10 @@ public class ProductAdminController {
    *     product
    */
   @PostMapping
-  @Operation(summary = "Create a new product")
+  @Operation(
+      summary = "Create a new product",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<ProductDTO> createProduct(
       @Valid @RequestBody CreateProductDTO createProductDTO) {
     log.debug("REST request to save Product : {}", createProductDTO);
@@ -63,7 +69,10 @@ public class ProductAdminController {
    *     product
    */
   @PutMapping("/{id}")
-  @Operation(summary = "Update an existing product")
+  @Operation(
+      summary = "Update an existing product",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<ProductDTO> updateProduct(
       @PathVariable Long id,
       @Valid @RequestBody CreateProductDTO createProductDTO) {
@@ -80,7 +89,10 @@ public class ProductAdminController {
    * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}
    */
   @DeleteMapping("/{id}")
-  @Operation(summary = "Delete a product")
+  @Operation(
+      summary = "Delete a product",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
     log.debug("REST request to delete Product : {}", id);
     productService.delete(id);
@@ -96,7 +108,10 @@ public class ProductAdminController {
    *     inventory
    */
   @PutMapping("/{id}/inventory")
-  @Operation(summary = "Update inventory for a product")
+  @Operation(
+      summary = "Update inventory for a product",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<InventoryDTO> updateInventory(
       @PathVariable Long id,
       @Valid @RequestBody InventoryDTO inventoryDTO) {
@@ -114,7 +129,10 @@ public class ProductAdminController {
    *     alerts
    */
   @GetMapping("/inventory/low-stock")
-  @Operation(summary = "Get low stock alerts (admin only)")
+  @Operation(
+      summary = "Get low stock alerts (admin only)",
+      security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
+  )
   public ResponseEntity<List<InventoryDTO>> getLowStockAlerts(
       @RequestParam(defaultValue = "5") int threshold) {
     log.debug("REST request to get low stock alerts with threshold: {}", threshold);
