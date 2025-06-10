@@ -68,8 +68,6 @@ public class SecurityConfig {
                                    // Auth endpoints - public access
                                    .requestMatchers("/api/v1/auth/register").permitAll()
                                    .requestMatchers("/api/v1/auth/login").permitAll()
-                                   // WebSocket endpoints - public access 
-                                   .requestMatchers("/ws/**").permitAll()
                                    // User profile endpoints - authenticated user access
                                    // Admin endpoints - admin only access
                                    .requestMatchers("/api/v1/admin/**").hasAuthority(
