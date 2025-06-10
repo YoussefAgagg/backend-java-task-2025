@@ -1,6 +1,8 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.config;
 
 import java.util.concurrent.Executor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskDecorator;
@@ -19,7 +21,18 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
  */
 @Configuration
 @EnableAsync
+@RequiredArgsConstructor
 public class AsyncConfiguration {
+
+  @Value("${async.core-pool-size:5}")
+  private int corePoolSize;
+
+  @Value("${async.max-pool-size:10}")
+  private int maxPoolSize;
+
+  @Value("${async.queue-capacity:100}")
+  private int queueCapacity;
+
   /**
    * Decorator to propagate the context to the async threads.
    *
@@ -32,17 +45,17 @@ public class AsyncConfiguration {
 
   /**
    * Defines a bean named "taskExecutor" to provide a custom thread pool task executor for
-   * asynchronous operations in the application. The executor is configured with a core pool size of
-   * 5, a maximum pool size of 10, a queue capacity of 100, and a thread name prefix "Async-".
+   * asynchronous operations in the application. The executor is configured with properties from
+   * the application configuration.
    *
    * @return an {@link Executor} instance configured as a thread pool task executor.
    */
   @Bean(name = "taskExecutor")
   public Executor taskExecutor() {
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-    executor.setCorePoolSize(5);
-    executor.setMaxPoolSize(10);
-    executor.setQueueCapacity(100);
+    executor.setCorePoolSize(corePoolSize);
+    executor.setMaxPoolSize(maxPoolSize);
+    executor.setQueueCapacity(queueCapacity);
     executor.setThreadNamePrefix("Async-");
     executor.initialize();
     return executor;

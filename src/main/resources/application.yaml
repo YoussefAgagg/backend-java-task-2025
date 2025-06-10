@@ -19,9 +19,6 @@ spring:
         order_updates: false
         order_inserts: false
     generate-ddl: false
-  docker:
-    compose:
-      enabled: ${SPRING_DOCKER_COMPOSE_ENABLED:false}
 # JWT configuration for local
 jwt:
   secret: ${JWT_SECRET:LocalRouhMatrouhSecretKeyLocalRouhMatrouhSecretKey}
@@ -51,13 +48,6 @@ management:
     enable:
       all: true
 
-logging:
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - [%X{traceId:-},,%X{spanId:-}] %msg%n"
-  level:
-    com:
-      gitthub:
-        youssefagagg.ecommerceorderprocessor: DEBUG
 
 # Rate limiting configuration
 rate-limit:
