@@ -1,8 +1,10 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.config;
 
+import com.gitthub.youssefagagg.ecommerceorderprocessor.security.websocket.WebSocketSecurityInterceptor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -16,6 +18,8 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @AllArgsConstructor
 @Slf4j
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+  private final WebSocketSecurityInterceptor webSocketSecurityInterceptor;
 
   @Override
   public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -32,6 +36,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     // Register the "/ws" endpoint, enabling SockJS fallback options
     registry.addEndpoint("/ws")
             .setAllowedOriginPatterns("*");
+  }
+
+  @Override
+  public void configureClientInboundChannel(ChannelRegistration registration) {
+    // Add security interceptor to the client inbound channel
+    registration.interceptors(webSocketSecurityInterceptor);
   }
 
 }
