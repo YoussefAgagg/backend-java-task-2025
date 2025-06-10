@@ -56,3 +56,34 @@ logging:
     com:
       gitthub:
         youssefagagg.ecommerceorderprocessor: DEBUG
+
+# Rate limiting configuration
+rate-limit:
+  # Default rate limit settings (20 requests per minute)
+  capacity: 20
+  refill-tokens: 20
+  refill-duration: 60
+
+  # Endpoint-specific rate limits
+  endpoints:
+    # Authentication endpoints - stricter limits (5 requests per minute)
+    "/api/v1/auth/login":
+      capacity: 5
+      refill-tokens: 5
+      refill-duration: 60
+    "/api/v1/auth/register":
+      capacity: 3
+      refill-tokens: 3
+      refill-duration: 60
+
+    # Admin endpoints - moderate limits (10 requests per minute)
+    "/api/v1/admin/*":
+      capacity: 10
+      refill-tokens: 10
+      refill-duration: 60
+
+    # Public endpoints - more lenient limits (30 requests per minute)
+    "/api/v1/products/*":
+      capacity: 30
+      refill-tokens: 30
+      refill-duration: 60
