@@ -33,7 +33,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.mapper.OrderItemMapperIm
 import com.gitthub.youssefagagg.ecommerceorderprocessor.mapper.OrderMapper;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.mapper.OrderMapperImpl;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.InventoryRepository;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.NotificationRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.OrderItemRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.OrderRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.ProductRepository;
@@ -96,8 +95,6 @@ class OrderServiceImplTest {
   private InventoryRepository inventoryRepository;
   @Mock
   private OrderItemRepository orderItemRepository;
-  @Mock
-  private NotificationRepository notificationRepository;
   @Mock
   private UserRepository userRepository;
   @Mock
@@ -225,7 +222,6 @@ class OrderServiceImplTest {
         productRepository,
         inventoryRepository,
         orderItemRepository,
-        notificationRepository,
         orderMapper,
         inventoryMapper,
         webSocketService,
@@ -588,7 +584,6 @@ class OrderServiceImplTest {
         ProductRepository productRepository,
         InventoryRepository inventoryRepository,
         OrderItemRepository orderItemRepository,
-        NotificationRepository notificationRepository,
         OrderMapper orderMapper,
         InventoryMapper inventoryMapper,
         WebSocketService webSocketService,
@@ -598,7 +593,7 @@ class OrderServiceImplTest {
         KeyLockManager keyLockManager,
         User currentUser) {
       super(userRepository, orderRepository, productRepository, inventoryRepository,
-            orderItemRepository, notificationRepository, orderMapper, inventoryMapper,
+            orderItemRepository, orderMapper, inventoryMapper,
             webSocketService, auditService, paymentService, notificationService, keyLockManager);
       this.currentUser = currentUser;
     }
