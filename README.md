@@ -183,7 +183,7 @@ The application uses optimistic locking to prevent concurrent modifications of t
 To prevent duplicate order creation, the application uses idempotency keys:
 
 - Each order request must include a unique idempotency key
-- If a request with the same idempotency key is received, the original response is returned
+- If a request with the same idempotency key is received, it will be blocked until the first request is processed
 - This ensures that network issues or retries don't result in duplicate orders
 - The same approach is used for payment processing
 
@@ -255,21 +255,6 @@ The WebSocket client supports subscribing to the following topics:
 - `/topic/admin/inventory/low-stock`: Low stock alerts (admin only)
 
 ### Authentication
-
-WebSocket connections require JWT authentication. You can:
-
-1. Obtain a JWT token by calling the login API endpoint
-2. Paste the token in the "JWT Token" field in the WebSocket client
-3. The token will be automatically included in the WebSocket connection request
-
-### Example Usage
-
-1. Log in to the application to obtain a JWT token
-2. Open the WebSocket client and enter the token
-3. Connect to the WebSocket server
-4. Subscribe to `/topic/notifications/{your-username}`
-5. Create a new order using the REST API
-6. Observe the order status notifications in the WebSocket client
 
 ## Authentication and Authorization
 
@@ -371,7 +356,6 @@ The application has comprehensive test coverage:
 - **Integration Tests**: Tests for component interactions with real dependencies
 - **API Tests**: Tests for REST endpoints using MockMvc
 - **Database Tests**: Tests for database operations using Testcontainers
-- **Security Tests**: Tests for authentication and authorization
 - **Code Coverage**: JaCoCo reports for code coverage analysis
 
 ## CI/CD Pipeline
