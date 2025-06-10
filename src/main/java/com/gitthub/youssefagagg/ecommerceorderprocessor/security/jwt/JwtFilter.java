@@ -63,6 +63,11 @@ public class JwtFilter extends OncePerRequestFilter {
     if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
       return bearerToken.substring(7);
     }
+    // check request parameters for token
+    String token = request.getParameter("token");
+    if (StringUtils.hasText(token)) {
+      return token;
+    }
     return null;
   }
 }
