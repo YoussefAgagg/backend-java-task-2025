@@ -2,6 +2,7 @@
 .gradle/
 build/
 !build/libs/*.jar
+!build/dependency/
 
 # IDE files
 .idea/
