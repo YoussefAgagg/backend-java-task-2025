@@ -7,7 +7,8 @@ RUN chmod +x ./gradlew
 COPY src src
 
 RUN ./gradlew build -x test
-RUN mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
+RUN mkdir -p build/dependency
+RUN java -Djarmode=layertools -jar build/libs/*.jar extract --destination build/dependency
 
 FROM eclipse-temurin:21-jre-alpine
 VOLUME /tmp
