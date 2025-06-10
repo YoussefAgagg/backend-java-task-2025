@@ -18,7 +18,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.exception.custom.CustomE
 import com.gitthub.youssefagagg.ecommerceorderprocessor.mapper.InventoryMapper;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.mapper.OrderMapper;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.InventoryRepository;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.NotificationRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.OrderItemRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.OrderRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.ProductRepository;
@@ -61,7 +60,6 @@ public class OrderServiceImpl extends BaseService implements OrderService {
   private final ProductRepository productRepository;
   private final InventoryRepository inventoryRepository;
   private final OrderItemRepository orderItemRepository;
-  private final NotificationRepository notificationRepository;
   private final OrderMapper orderMapper;
   private final InventoryMapper inventoryMapper;
   private final WebSocketService webSocketService;
@@ -76,7 +74,6 @@ public class OrderServiceImpl extends BaseService implements OrderService {
       ProductRepository productRepository,
       InventoryRepository inventoryRepository,
       OrderItemRepository orderItemRepository,
-      NotificationRepository notificationRepository,
       OrderMapper orderMapper,
       InventoryMapper inventoryMapper,
       WebSocketService webSocketService,
@@ -89,7 +86,6 @@ public class OrderServiceImpl extends BaseService implements OrderService {
     this.productRepository = productRepository;
     this.inventoryRepository = inventoryRepository;
     this.orderItemRepository = orderItemRepository;
-    this.notificationRepository = notificationRepository;
     this.orderMapper = orderMapper;
     this.inventoryMapper = inventoryMapper;
     this.webSocketService = webSocketService;
@@ -104,6 +100,7 @@ public class OrderServiceImpl extends BaseService implements OrderService {
   public OrderDTO createOrder(OrderDTO orderDTO) {
     log.debug("Request to create Order : {}", orderDTO);
     return keyLockManager.withLock(orderDTO.getIdempotencyKey(), () -> {
+
       // Step 1: Initialize order with current user
       Order order = initializeOrder(orderDTO);
 
@@ -175,21 +172,8 @@ public class OrderServiceImpl extends BaseService implements OrderService {
                                   "Product not found: " + itemDTO.getProductId());
       }
 
-      Inventory inventory = product.getInventory();
-
-      // Check if enough inventory is available
-      if (inventory.getAvailableQuantity() < itemDTO.getQuantity()) {
-        throw new CustomException(ErrorCode.INVALID_REQUEST,
-                                  "Not enough inventory for product: " + product.getName() +
-                                  ". Available: " + inventory.getAvailableQuantity() +
-                                  ", Requested: " + itemDTO.getQuantity());
-      }
-
-      // Reserve inventory
-      if (!inventory.reserve(itemDTO.getQuantity())) {
-        throw new CustomException(ErrorCode.INVALID_REQUEST,
-                                  "Failed to reserve inventory for product: " + product.getName());
-      }
+      Inventory inventory = getInventory(itemDTO,
+                                         product);
       inventoryRepository.save(inventory);
 
       // Create and save order item
@@ -202,6 +186,25 @@ public class OrderServiceImpl extends BaseService implements OrderService {
     // Update order total
     order.setTotalAmount(totalAmount);
     return orderRepository.save(order);
+  }
+
+  private Inventory getInventory(OrderItemDTO itemDTO, Product product) {
+    Inventory inventory = product.getInventory();
+
+    // Check if enough inventory is available
+    if (inventory.getAvailableQuantity() < itemDTO.getQuantity()) {
+      throw new CustomException(ErrorCode.INVALID_REQUEST,
+                                "Not enough inventory for product: " + product.getName() +
+                                ". Available: " + inventory.getAvailableQuantity() +
+                                ", Requested: " + itemDTO.getQuantity());
+    }
+
+    // Reserve inventory
+    if (!inventory.reserve(itemDTO.getQuantity())) {
+      throw new CustomException(ErrorCode.INVALID_REQUEST,
+                                "Failed to reserve inventory for product: " + product.getName());
+    }
+    return inventory;
   }
 
   /**
@@ -427,13 +430,6 @@ public class OrderServiceImpl extends BaseService implements OrderService {
     return order;
   }
 
-  /**
-   * Update an order's status and save it
-   */
-  private Order updateOrderStatus(Order order, OrderStatus newStatus) {
-    order.updateStatus(newStatus);
-    return orderRepository.save(order);
-  }
 
   /**
    * Release reserved inventory for all items in an order
@@ -606,7 +602,7 @@ public class OrderServiceImpl extends BaseService implements OrderService {
                     BigDecimal totalSales = (BigDecimal) row[1];
                     return new DailySalesReportDTO(date, totalSales);
                   })
-                  .collect(Collectors.toList());
+                  .toList();
   }
 
 }
