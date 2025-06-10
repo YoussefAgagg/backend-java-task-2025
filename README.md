@@ -11,6 +11,7 @@ A Spring Boot application for processing e-commerce orders with a focus on relia
 - [Features](#features)
 - [Technologies](#technologies)
 - [Database Management](#database-management)
+    - [Database Schema](#database-schema)
 - [Concurrency Control](#concurrency-control)
 - [Asynchronous Processing](#asynchronous-processing)
 - [API Documentation](#api-documentation)
@@ -144,6 +145,27 @@ The migration files are organized as follows:
 
 Test data is loaded only in local and development environments using context-specific Liquibase migrations. This ensures
 that production environments remain clean while developers have realistic data to work with.
+
+### Database Schema
+
+The application uses a relational database schema designed to support all the features of the e-commerce platform. The
+schema includes tables for users, products, inventory, orders, payments, notifications, and audit logs.
+
+![Database Schema](db.png)
+
+The main entities and their relationships:
+
+- **Users**: Stores user account information and authentication details
+- **Products**: Contains product information including name, description, and price
+- **Inventory**: Tracks product stock levels with quantity and reserved quantity
+- **Orders**: Stores order information with status and total amount
+- **Order Items**: Links orders to products with quantity and price
+- **Payments**: Records payment transactions for orders
+- **Notifications**: Stores user notifications for various events
+- **Audit Logs**: Tracks all changes to entities for compliance and debugging
+
+All tables include audit fields (created_by, created_date, last_modified_by, last_modified_date) and version fields for
+optimistic locking.
 
 ## Concurrency Control
 
