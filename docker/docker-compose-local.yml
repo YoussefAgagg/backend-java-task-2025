@@ -1,5 +1,6 @@
 services:
   app:
+    container_name: ecommerce-order-processor
     build:
       context: ..
       dockerfile: Dockerfile
@@ -19,6 +20,7 @@ services:
       - postgres
 
   postgres:
+    container_name: postgres-ecommerce
     image: 'postgres:latest'
     environment:
       - 'POSTGRES_DB=${POSTGRES_DB}'
