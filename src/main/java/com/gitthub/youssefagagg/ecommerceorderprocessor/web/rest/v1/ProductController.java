@@ -6,6 +6,8 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.ProductDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.Product;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +45,11 @@ public class ProductController {
       summary = "Get all products with pagination"
   )
   public ResponseEntity<PaginationResponse<ProductDTO>> getAllProducts(
-      Pageable pageable,
+      @Parameter(
+          description = "Pagination information",
+          schema = @Schema(implementation = Pageable.class),
+          example = "{\"page\": 0, \"size\": 10}"
+      ) Pageable pageable,
       @RequestParam(required = false) String name) {
     log.debug("REST request to get a page of Products");
     PaginationResponse<ProductDTO> page = name != null ?

@@ -8,6 +8,8 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.PaginationResponse;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.OrderStatus;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
@@ -51,7 +53,11 @@ public class OrderAdminController {
       security = @SecurityRequirement(name = OPEN_API_SECURITY_REQUIREMENT)
   )
   public ResponseEntity<PaginationResponse<OrderDTO>> getAllOrders(
-      Pageable pageable,
+      @Parameter(
+          description = "Pagination information",
+          schema = @Schema(implementation = Pageable.class),
+          example = "{\"page\": 0, \"size\": 10}"
+      ) Pageable pageable,
       @RequestParam(required = false) OrderStatus status) {
     log.debug("REST request to get a page of all Orders");
     PaginationResponse<OrderDTO> page = status != null ?
