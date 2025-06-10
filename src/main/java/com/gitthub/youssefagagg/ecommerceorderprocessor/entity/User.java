@@ -1,7 +1,7 @@
 package com.gitthub.youssefagagg.ecommerceorderprocessor.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,7 +37,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @ToString(exclude = {"password", "roles"})
-@JsonIgnoreProperties(ignoreUnknown = true) // ignore all by default
 public class User extends AbstractAuditingEntity {
 
   @Id
@@ -60,6 +59,7 @@ public class User extends AbstractAuditingEntity {
   @Column(name = "password_hash",
           length = 60,
           nullable = false)
+  @JsonIgnore
   private String password;
 
   @NotNull
@@ -95,5 +95,6 @@ public class User extends AbstractAuditingEntity {
                                        referencedColumnName = "name")
   )
   @Builder.Default
+  @JsonIgnore
   private Set<Role> roles = new HashSet<>();
 }
