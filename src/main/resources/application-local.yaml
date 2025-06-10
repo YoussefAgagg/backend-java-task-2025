@@ -1,3 +1,6 @@
 spring:
   liquibase:
     contexts: local
+  docker:
+    compose:
+      enabled: true

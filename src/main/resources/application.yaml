@@ -19,13 +19,15 @@ spring:
         order_updates: false
         order_inserts: false
     generate-ddl: false
+  docker:
+    compose:
+      enabled: ${SPRING_DOCKER_COMPOSE_ENABLED:false}
 # JWT configuration for local
 jwt:
-  secret: LocalRouhMatrouhSecretKeyLocalRouhMatrouhSecretKey
+  secret: ${JWT_SECRET:LocalRouhMatrouhSecretKeyLocalRouhMatrouhSecretKey}
   expiration: 86400 # 1 day in seconds
   issuer: ecommerce-order-processor
 springdoc:
-  # Configure Swagger UI for minimal resource usage
   swagger-ui.path: /swagger-ui/index.html
   show-actuator: false
   api-docs:
