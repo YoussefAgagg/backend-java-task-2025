@@ -41,7 +41,4 @@ public class LoginRequest {
           maxLength = 100)
   private String password;
 
-  @Schema(description = "Information about the user's device (browser, OS, etc.)",
-          example = "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15")
-  private String deviceInfo;
 }
