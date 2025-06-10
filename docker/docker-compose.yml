@@ -1,6 +1,7 @@
 services:
   app:
-    image: 'ghcr.io/youssefagagg/ecommerce-order-processor:latest'
+    container_name: ecommerce-order-processor
+    image: 'ghcr.io/youssefagagg/backend-java-task-2025:latest'
     ports:
       - '8080:8080'
     environment:
@@ -11,6 +12,7 @@ services:
       - postgres
 
   postgres:
+    container_name: postgres-ecommerce
     image: 'postgres:latest'
     environment:
       - 'POSTGRES_DB=ecommerce'
