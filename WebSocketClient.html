@@ -157,16 +157,8 @@
             // Create a STOMP client over the WebSocket connection
             stompClient = Stomp.over(socket);
 
-            // Set additional headers if token is provided
-            const headers = {};
-            if (token) {
-                // Add token to headers - this is the key part
-                headers['Authorization'] = 'Bearer ' + token;
-
-                // Log that we're adding the token to headers
-                console.log('Adding token to headers:', headers);
-                addMessage('Token added to headers: ' + JSON.stringify(headers), 'system-message');
-            } else {
+            // Check if token is provided
+            if (!token) {
                 addMessage('No token provided', 'error-message');
             }
 
@@ -176,14 +168,13 @@
                 console.log('STOMP debug:', str);
             };
 
-            // Connect to the STOMP server with headers
+            // Connect to the STOMP server
             stompClient.connect(
-                headers,
+                {},
                 function (frame) {
                     // Connection successful
                     addMessage('Connected to WebSocket server', 'system-message');
                     addMessage('Connected to: ' + serverUrl, 'system-message');
-                    addMessage('Connected with headers: ' + JSON.stringify(headers), 'system-message');
                     addMessage('Connection frame: ' + frame, 'system-message');
 
                     // Log frame details to console for debugging
