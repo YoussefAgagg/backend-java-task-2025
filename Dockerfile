@@ -19,7 +19,7 @@ FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
 # Add metadata labels
-LABEL org.opencontainers.image.source="https://github.com/youssefagagg/ecommerce-order-processor"
+LABEL org.opencontainers.image.source="https://github.com/YoussefAgagg/backend-java-task-2025"
 LABEL org.opencontainers.image.description="E-commerce Order Processor Application"
 LABEL org.opencontainers.image.licenses="MIT"
 
