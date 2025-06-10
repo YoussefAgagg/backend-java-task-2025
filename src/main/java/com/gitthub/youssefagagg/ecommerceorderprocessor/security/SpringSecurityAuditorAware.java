@@ -12,7 +12,7 @@ public class SpringSecurityAuditorAware implements AuditorAware<String> {
   @Override
   @NonNull
   public Optional<String> getCurrentAuditor() {
-    return Optional.of(SecurityUtils.getCurrentUserUserName().orElse("anonymous"));
+    return Optional.of(SecurityUtils.getCurrentUserUserName().orElse("system"));
   }
 
 }
