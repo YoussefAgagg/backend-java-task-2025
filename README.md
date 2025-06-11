@@ -39,6 +39,7 @@ A Spring Boot application for processing e-commerce orders with a focus on relia
 
 ### Running with Docker
 
+make sure the .env file is set up correctly with the required environment variables.
 ```bash
 cd docker
 docker-compose up
