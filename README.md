@@ -57,13 +57,12 @@ docker-compose up
 ./gradlew test
 ```
 
-### Generating API Documentation
+### Swagger API Documentation
 
 Start the application and navigate to:
 
-```
-http://localhost:8080/swagger-ui/index.html
-```
+[http://localhost:8080/swagger-ui/index.html
+](http://localhost:8080/swagger-ui/index.html)
 
 ## Project Structure
 
