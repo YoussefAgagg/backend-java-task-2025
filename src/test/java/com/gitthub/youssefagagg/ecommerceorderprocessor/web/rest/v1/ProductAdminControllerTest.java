@@ -1,4 +1,4 @@
-package com.gitthub.youssefagagg.ecommerceorderprocessor.user.web.rest.v1;
+package com.gitthub.youssefagagg.ecommerceorderprocessor.web.rest.v1;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -16,7 +16,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.CreateProductDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.InventoryDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.ProductDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.ProductService;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.web.rest.v1.ProductAdminController;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;

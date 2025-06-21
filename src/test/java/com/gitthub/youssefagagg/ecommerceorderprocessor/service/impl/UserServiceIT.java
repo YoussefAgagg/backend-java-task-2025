@@ -1,4 +1,4 @@
-package com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.impl;
+package com.gitthub.youssefagagg.ecommerceorderprocessor.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

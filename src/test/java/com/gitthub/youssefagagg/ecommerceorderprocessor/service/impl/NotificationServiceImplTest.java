@@ -1,4 +1,4 @@
-package com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.impl;
+package com.gitthub.youssefagagg.ecommerceorderprocessor.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -23,7 +23,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.NotificationR
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.UserRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.security.SecurityUtils;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.WebSocketService;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.service.impl.NotificationServiceImpl;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.impl;
+package com.gitthub.youssefagagg.ecommerceorderprocessor.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -16,7 +16,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.exception.custom.CustomE
 import com.gitthub.youssefagagg.ecommerceorderprocessor.mapper.AuditLogMapper;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.AuditLogRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.UserRepository;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.service.impl.AuditServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

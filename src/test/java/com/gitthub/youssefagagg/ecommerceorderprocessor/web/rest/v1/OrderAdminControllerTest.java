@@ -1,4 +1,4 @@
-package com.gitthub.youssefagagg.ecommerceorderprocessor.user.web.rest.v1;
+package com.gitthub.youssefagagg.ecommerceorderprocessor.web.rest.v1;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -17,7 +17,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.OrderItemDTO;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.dto.PaginationResponse;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.entity.OrderStatus;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.OrderService;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.web.rest.v1.OrderAdminController;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;

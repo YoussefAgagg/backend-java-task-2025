@@ -1,4 +1,4 @@
-package com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.impl;
+package com.gitthub.youssefagagg.ecommerceorderprocessor.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -43,7 +43,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.service.AuditService;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.NotificationService;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.PaymentService;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.service.WebSocketService;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.service.impl.OrderServiceImpl;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.util.KeyLockManager;
 import java.math.BigDecimal;
 import java.sql.Date;

@@ -1,4 +1,4 @@
-package com.gitthub.youssefagagg.ecommerceorderprocessor.user.service.impl;
+package com.gitthub.youssefagagg.ecommerceorderprocessor.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -22,7 +22,6 @@ import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.RoleRepositor
 import com.gitthub.youssefagagg.ecommerceorderprocessor.repository.UserRepository;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.security.AuthoritiesRole;
 import com.gitthub.youssefagagg.ecommerceorderprocessor.security.jwt.TokenProvider;
-import com.gitthub.youssefagagg.ecommerceorderprocessor.service.impl.AuthServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.Set;
